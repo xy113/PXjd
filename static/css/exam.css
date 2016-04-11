@@ -1,0 +1,38 @@
+/* CSS Document */
+.exam-home{margin:100px auto; width:500px;}
+.exam-home h1{font-family:"Hiragino Sans GB"; text-align:center; font-size:32px;}
+.exam-home .nowtime,.exam-home .tips{text-align:center; margin:20px 0; height:20px; font-size:16px;}
+.exam-home .buttondiv{clear:both; margin-top:50px; text-align:center;}
+.exam-home .buttondiv .bigbutton{width:240px; height:50px; line-height:50px; display:inline-block;
+background:#093; color:#fff; font-size:16px; font-weight:bold; text-align:center; border-radius:5px;}
+.exam-home .buttondiv .bigbutton:hover{background:#083;}
+
+#paper{clear:both; width:860px; margin:20px auto;}
+#paper h1{font-size:22px; margin:10px 0;}
+#paper .content{}
+#paper .content h3{font-size:14px; padding:5px 0;}
+#paper .content .div{padding:5px 0; clear:both;}
+#paper .content .input-text,#paper .content .textarea{width:80%; resize:none; border-width:1px;
+border-color:#666 #ccc #ccc #666; border-style:solid; padding:0 5px; height:26px; box-sizing:border-box;}
+#paper .content .textarea{height:100px; padding:5px;}
+#paper .answer{padding:5px 0; color:#060; font-size:14px; font-weight:bold;}
+#paper .bottom{margin:30px 0 50px; clear:both;}
+#paper .bottom .submitbutton{width:120px; height:40px; line-height:40px; display:block; color:#fff; font-size:14px;
+background:#093; font-weight:bold; text-align:center; border-radius:5px;}
+#paper .bottom .submitbutton:hover{background:#083;}
+#paper .tips{clear:both; margin-top:10px; font-size:14px; color:#F30;}
+
+#leftmenu{width:120px; position:fixed; left:0; top:150px; z-index:500; border:1px #e0e0e0 solid; background:#fff; overflow:hidden;}
+#leftmenu h3{height:40px; line-height:40px; clear:both; text-align:center; font-size:14px; border-top:1px #e0e0e0 solid; margin-top:-1px;}
+#leftmenu h3 a{display:block;}
+#leftmenu h3 a:hover{background:#f2f2f2;}
+
+#rightmenu{width:145px; padding:10px; position:fixed; top:0px; right:0; border:1px #e0e0e0 solid; background:#fff;}
+#rightmenu .timelength{font-size:16px; padding:5px 0;}
+#rightmenu .timelast{font-size:14px; padding:5px 0;}
+#rightmenu .subjectbox{padding:1px; overflow:hidden;}
+#rightmenu .subjectbox h4{margin:10px 0;}
+#rightmenu .subjectbox .boxdiv{width:105%;}
+#rightmenu .subjectbox .box{width:22px; height:22px; line-height:22px; text-align:center; float:left;
+border:1px #e0e0e0 solid; margin:-1px 0 0 -1px; cursor:pointer; font-size:12px;}
+#rightmenu .subjectbox .checked{background:#060; color:#fff;}

@@ -1,0 +1,1 @@
+<?php if (!defined('IN_DSXCMS')) die('Access Denied!');?><?php include template('post_title'); ?><div class="newpost-item" id="p-content-body"><?php $editorname='content'; ?>    <?php $editorcontent=$content; include template('editor'); ?></div><?php include template('post_attribute'); ?>

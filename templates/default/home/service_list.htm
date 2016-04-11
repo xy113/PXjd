@@ -1,0 +1,43 @@
+{template header_home}
+<div id="mainFrame">
+	<form method="post" autocomplete="off">
+    <input type="hidden" name="formsubmit" value="yes">
+    <input type="hidden" name="formhash" value="{FORMHASH}">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="listtable goodslist">
+      <thead>
+      <tr>
+        <th width="30"><input type="checkbox" class="checkbox" onclick="DSXCMS.checkAll(this,'sid[]')"></th>
+        <th width="100">图片</th>
+        <th>服务项目</th>
+        <th width="60">价格</th>
+        <th width="100">电话</th>
+        <th width="110">发布时间</th>
+      </tr>
+      </thead>
+      <tbody>
+      {loop $servicelist $sid $list}
+      <tr>
+        <td><input type="checkbox" value="{$sid}" name="sid[]"></td>
+        <td><div class="pic"><img src="{$list[pic]}"></div></td>
+        <td>
+        	<h3><a href="/?m=service&c=detail&sid={$sid}" target="_blank">{$list[title]}</a></h3>
+           <p><a href="/?m=home&c=service&a=edit&sid={$sid}">编辑</a> <a href="/?m=service&c=detail&sid={$sid}" target="_blank">查看</a></p>
+        </td>
+        <td>{$list[price]}</td>
+        <td>{$list[tel]}</td>
+        <td>{$list[dateline]}</td>
+      </tr>
+      {/loop}
+      </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="8" style="padding:15px 10px;">
+        	<div class="pages">{$pages}</div>
+           <input type="submit" class="button submit" value="删除">
+        </td>
+      </tr>
+      </tfoot>
+    </table>
+    </form>
+</div>
+{template footer_home}

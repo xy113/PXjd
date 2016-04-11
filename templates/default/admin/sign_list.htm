@@ -1,0 +1,62 @@
+{template header}
+<h2>
+<span class="right">
+	<form name="search" action="/?">
+        <input type="hidden" name="m" value="admin">
+        <input type="hidden" name="c" value="$G[c]">
+        <input type="hidden" name="a" value="$G[a]">
+        <select name="field" id="field">
+        	<option value="all">全部</option>
+           <option value="uid"{if $field=='uid'} selected{/if}>UID</option>
+        	<option value="username"{if $field=='username'} selected{/if}>姓名</option>
+        </select>
+        <input type="text" class="text text200" name="kw" value="$kw">
+        <input type="submit" class="button search" value="$lang[search]">
+    </form>
+</span>
+签到记录
+</h2>
+<form method="post">
+<input type="hidden" name="formsubmit" value="yes" />
+<input type="hidden" name="formhash" value="{FORMHASH}">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="listtable">
+<thead>
+  <tr>
+    <th width="30"><input type="checkbox" class="checkbox" onclick="DSXCMS.checkAll(this,'delete[]')"></th>
+    <th width="50">照片</th>
+    <th width="60">UID</th>
+    <th width="100">姓名</th>
+    <th width="130">签到时间</th>
+    <th width="200">签到位置</th>
+    <th>备注</th>
+    <th width="110">IP地址</th>
+    
+  </tr>
+ </thead>
+ <tbody>
+  <!--{loop $signlist $signid $list}-->
+  <tr>
+    <td><input type="checkbox" class="checkbox" name="delete[]" value="$signid"></td>
+    <td><a href="$list[pic]" target="_blank"><img src="$list[pic]" width="50" height="50"></a></td>
+    <td>$list[uid]</td>
+    <th><a href="/?m=$G[m]&c=$G[c]&a=$G[a]&field=uid&kw=$list[uid]">$list[username]</a></th>
+    <td>$list[signtime]</td>
+    <td>$list[location]</td>
+    <td>$list[remark]</td>
+    <td>$list[userip]</td>
+  </tr>
+  <!--{/loop}-->
+  </tbody>
+  <tfoot>
+  <tr>
+      <td colspan="8">
+          <span class="pagebox">$pages</span>
+          <input type="submit" class="button" value="删除">　 
+          <input type="button" class="button" value="$lang[refresh]" onclick="window.location.reload()">　 
+          {if $field=='uid'&&$kw}<a href="javascript:;" class="button" onclick="window.open('/?m=$G[m]&c=$G[c]&a=export&uid=$kw');">导出EXCEL表格</a>{/if}
+      </td>
+  </tr>
+ </tfoot>
+</table>
+</form>
+{template footer}

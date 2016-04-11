@@ -1,0 +1,24 @@
+<?php if (!defined('IN_DSXCMS')) die('Access Denied!');?><div id="leftNav">
+    <h3><span class="icon">&#xf013e;</span>个人设置</h3>
+    <ul>
+        <li><a href="/?m=home&c=profile" id="menu_profile">修改资料</a></li>
+        <li><a href="/?m=home&c=password" id="menu_password">修改密码</a></li>
+        <li><a href="/?m=home&c=avatar" id="menu_avatar">头像形象</a></li>
+    </ul>
+    <h3><span class="icon">&#xf01ec;</span>在线考试</h3>
+    <ul>
+        <li><a href="/?m=home&c=examsign" id="menu_examsign">考生登记</a></li>
+        <li><a href="/?m=home&c=examsearch" id="menu_examsearch">成绩查询</a></li>
+    </ul>
+    <h3><span class="icon">&#xf0034;</span>其他</h3>
+    <ul>
+        <li><a rel="ac" href="/?m=home&c=comment" id="menu_comment">我的评论</a></li>
+        <li><a rel="ac" href="/?m=home&c=favorite" id="menu_favorite">我的收藏</a></li>
+        <li><a rel="ac" href="/?m=home&c=photo" id="menu_photo">照片管理</a></li>
+        <!--<li><a rel="ac" href="/?m=home&c=message" node="message"><span class="icon">&#xf0142;</span>系统信息</a></li>-->
+    </ul>
+</div>
+<script type="text/javascript">
+var cur_menu = '#menu_<?php echo $G['c'];?>';
+$(cur_menu).addClass('selected');
+</script>

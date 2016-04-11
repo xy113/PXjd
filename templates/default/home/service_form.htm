@@ -1,0 +1,178 @@
+{template header_home}
+<div id="mainFrame" class="tableView">
+	<form method="post" id="serviceForm">
+    <input type="hidden" name="formsubmit" value="yes">
+    <input type="hidden" name="formhash" value="{FORMHASH}">
+	<div class="itemRow">
+        <div class="item-name">服务项目</div>
+        <div class="item-input"><input type="text" class="input-text" maxlength="60"  name="servicenew[title]" value="$service[title]" id="service_title"></div>
+        <div class="item-tips error" id="tips_title">请填写服务项目，至少2个字</div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">服务价格</div>
+        <div class="item-input"><input type="text" class="input-text" name="servicenew[price]" value="$service[price]" id="service_price"></div>
+        <div class="item-tips error" id="tips_price">请填写服务价格</div>
+    </div>
+	<div class="itemRow">
+        <div class="item-name">联系电话</div>
+        <div class="item-input"><input type="text" class="input-text" name="servicenew[tel]" value="$service[tel]" id="service_tel"></div>
+        <div class="item-tips error" id="tips_tel">请填写联系电话</div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">分类目录</div>
+        <div class="item-input">
+        	<select name="servicenew[catid]" id="service_category" class="input-select"><option value="0">选择分类目录</option>{$categoryoptions}</select>
+        </div>
+        <div class="item-tips error" id="tips_category">请选择服务类目</div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">所在地区</div>
+        <div class="item-input">
+        	<input type="hidden" name="servicenew[province]" id="service_province" value="$service[province]">
+           <input type="hidden" name="servicenew[city]" id="service_city" value="$service[city]">
+        	<select id="select_province" class="input-select"><option value="0">选择省份</option></select>
+           <select id="select_city" class="input-select"><option value="0">选择城市</option></select>
+        </div>
+        <div class="item-tips error" id="tips_district">请选择所在地区</div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">详细地址</div>
+        <div class="item-input">
+        	<input type="text" class="input-text" name="servicenew[address]" value="$service[address]" id="service_address">
+        </div>
+        <div class="item-tips error" id="tips_address">请填写详细地址</div>
+    </div>
+    <div class="itemRow">	 
+        <div class="item-name">上传图片</div>
+        <div class="item-input" style="width:auto;">
+        <div id="imageUploadQueue">
+        {loop $pics $plist}
+        <div class="imageUploadItem"><img src="{$plist[url]}">
+        	<input type="hidden" value="{$plist[image]}" name="pic[]">
+        	<a class="delete icon" href="javascript:;" title="删除" onclick="$(this).parent().remove();">&#xf00b3;</a>
+        </div>
+        {/loop}
+        </div>
+        <a class="icon" href="javascript:;" id="selectFileButton">+添加图片</a>
+        </div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">服务内容</div>
+        <div class="item-input"><textarea class="textarea" style="height:200px;" name="servicenew[content]" id="service_content">{$service[content]}</textarea></div>
+        <div class="item-tips error" id="tips_content">请简单介绍一下你的服务内容，至少5个字</div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">&nbsp;</div>
+        <div class="item-input"><input type="submit" class="submitButton" value="提交"></div>
+        <div class="item-tips"></div>
+    </div>
+    </form>
+</div>
+<form id="uploadForm" method="post" enctype="multipart/form-data" action="/?m=common&a=uploadimage">
+<input name="filedata" id="filedata" type="file" style="opacity:0; visibility:visible; position:absolute; z-index:200;">
+</form>
+<script type="text/javascript">
+$.ajax({
+	url:'/?m=common&c=district&a=showoptions&fid=0&selected=$service[province]',
+	success: function(option){
+		var optionlist = '<option value="0">选择省份</option>'+option;
+		$("#select_province").html(optionlist);
+		if(parseInt($("#select_province").val())>0){
+			loadCity($("#select_province").val(),'{$service[city]}');
+		}
+	}
+});
+
+function loadCity(province,selected){
+	$.ajax({
+		url:'/?m=common&c=district&a=showoptions&fid='+province+'&selected='+selected,
+		success: function(option){
+			var optionlist = '<option value="0">选择城市</option>'+option;
+			$("#select_city").html(optionlist);
+		}
+	});
+}
+$("#select_province").change(function(){
+	var province = $(this).find(":selected").text();
+	if(parseInt($(this).val()) > 0){
+		$("#service_province").val(province);
+		loadCity($(this).val(),'$service[city]');
+	}else {
+		$("#select_city").html('<option value="0">选择城市</option>');
+	}
+});
+$("#select_city").change(function(){
+	var city = $(this).find(":selected").text();
+	if(parseInt($(this).val()) > 0){
+		$("#service_city").val(city);
+	}
+});
+$("#selectFileButton").mouseover(function(){
+	$("#filedata").css({'left':$(this).offset().left,'top':$(this).offset().top,
+	'width':$(this).width(),'height':$(this).height()});
+});
+$("#filedata").change(function(){
+	$("#uploadForm").ajaxSubmit({
+		dataType:'json',
+		success:function(json){
+			if(json.errno == 0){
+				var del = $('<a class="delete icon" href="javascript:;" title="删除">&#xf00b3;</a>').bind('click',function(){
+					$(this).parent().remove();
+				});
+				var imageItem = $('<div class="imageUploadItem"><img src="'+json.data.url+'" />'+
+				'<input type="hidden" name="pic[]" value="'+json.data.attachment+'"></div>').append(del);
+				$("#imageUploadQueue").append(imageItem);
+			}else {
+				alert('上传失败('+json.error+')');
+			}
+		}
+	});
+});
+$("#serviceForm").submit(function(){
+	if(($("#service_title").val()).length < 2){
+		$("#tips_title").show();
+		return false;
+	}else {
+		$("#tips_title").hide();
+	}
+	
+	if(!$("#service_price").val()){
+		$("#tips_price").show();
+		return false;
+	}else {
+		$("#tips_price").hide();
+	}
+	if(!$("#service_tel").val()){
+		$("#tips_tel").show();
+		return false;
+	}else {
+		$("#tips_tel").hide();
+	}
+	if(!$("#service_category").val()){
+		$("#tips_category").show();
+		return false;
+	}else {
+		$("#tips_category").hide();
+	}
+	if(!$("#service_province").val() || !$("#service_city").val()){
+		$("#tips_district").show();
+		return false;
+	}else {
+		$("#tips_district").hide();
+	}
+	if(!$("#service_address").val()){
+		$("#tips_address").show();
+		return false;
+	}else {
+		$("#tips_address").hide();
+	}
+	if(($("#service_content").val()).length < 10){
+		$("#tips_content").show();
+		return false;
+	}else {
+		$("#tips_content").hide();
+	}
+	return true;
+});
+</script>
+{template footer_home}

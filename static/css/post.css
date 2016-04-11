@@ -1,0 +1,74 @@
+@charset "UTF-8";
+/* CSS Document */
+#newpost{width:980px; margin:0 auto; clear:both; overflow:hidden;}
+.newpost-main{width:700px; float:left; margin-right:20px;}
+.newpost-main:after{clear:both; display:block;}
+.newpost-attribute{overflow:hidden;}
+.newpost-title{font-size:22px; clear:both;}
+.newpost-item{clear:both; margin:20px 0;}
+.input-post-title{padding:7px 5px; text-align:center; font:bold 26px/1.5em "微软雅黑";
+border:1px #ddd solid; border-radius:5px; width:100%; box-sizing:border-box;}
+.newpost-content{background:#fff; border:1px #ddd solid; border-radius:2px; margin:20px 0; font-size:14px;}
+.newpost-content .content-sub-title{padding:10px; clear:both; border-bottom:1px #e0e0e0 solid; font-size:14px;}
+.newpost-content .content-body{padding:10px; clear:both;}
+.newpost-content .content-body p{padding:5px 0;}
+.newpost-content .textarea-summary{padding:8px; height:100px; font-size:14px; border:1px #ddd solid; resize:none; box-sizing:border-box; width:100%;}
+.newpost-content .input-text{padding:5px 8px; font-size:14px; border:1px #ddd solid; width:100%; box-sizing:border-box;}
+.newpost-content .input-text:focus,
+.newpost-content .textarea-summary:focus{border-color:#0CF; box-shadow:2px 2px 2px 2px rgba(0,0,0,0.1);}
+.newpost-content .radio-item{padding:5px 0; line-height:18px; font-size:14px; color:#555;}
+.newpost-content .radio-item input[type=radio]{vertical-align:-2px; margin-right:5px;}
+.newpost-content .icon{font-size:16px; margin-right:5px;}
+.newpost-content .input-text2{width:155px;}
+.newpost-content .input-button{background:#f5f5f5; border:1px #ddd solid; color:#555; cursor:pointer; box-shadow:0 0px 1px 0 rgba(0,0,0,0.2); height:30px; line-height:30px; border-radius:3px; padding:0 15px; display:inline-block;}
+.newpost-content .input-button:hover{color:#000; border:1px #999 solid;}
+.newpost-content .input-publish{background:#2EA2CC; color:#fff; border-color:#0074A2; margin-right:10px;}
+.newpost-content .input-publish:hover{background:#1e8cbe; color:#fff; border-color:#0074A2;}
+.newpost-content .input-button-small{height:26px; line-height:26px; vertical-align:2px;}
+.newpost-content .input-uploadify{padding:0; border-radius:3px; text-align:center;}
+.newpost-content .category-box{clear:both; height:175px; overflow-y:scroll; border:1px #d5d5d5 solid;}
+.newpost-content .select{border:1px #ddd solid; width:100%; box-sizing:border-box; height:28px; line-height:28px; font-size:14px; padding:2px;}
+.newpost-content .action-item{clear:both; padding:10px 0;}
+.newpost-content .add-new{color:#0074A2;}
+.newpost-content .add-new:hover{text-decoration:underline;}
+.newpost-content .image-preview{text-align:center;}
+.newpost-content .image-preview img{width:200px;}
+.newpost-content .tagLabel{clear:both;}
+.newpost-content .tagLabel:after{display:block; content:" "; clear:both; height:0;}
+.newpost-content .tagitem{display:inline-block; border:1px #ddd solid; margin:0 5px 5px 0;}
+.newpost-content .tagitem:hover{border-color:#999;}
+.newpost-content .tagitem span{display:inline-block; padding:4px 5px;}
+.newpost-content .tagitem i{padding:4px 5px; font-weight:bold; font-size:16px; font-style:normal; display:inline-block;}
+.newpost-content .image-item{margin:10px 0 0; position:relative; height:80px; overflow:hidden;}
+.newpost-content .image-item:after{clear:both; content:" "; display:block;}
+.newpost-content .image-item .image{width:100px; height:80px; text-align:center; background:#ccc; position:relative; float:left; margin-right:10px;}
+.newpost-content .image-item .image img{display:block; width:100px; margin:auto;}
+.newpost-content .image-item .image .loading{position:absolute; display:block; left:24px; top:24px; background:url(../images/common/loading.gif) no-repeat;}
+.newpost-content .image-item .description{overflow:hidden;}
+.newpost-content .image-item .description .textarea{height:78px;}
+.newpost-content .image-item .close{display:block; cursor:pointer; position:absolute; left:3px; color:#fff; font-size:16px;}
+.newpost-content #upload-queue-div{clear:both; margin-bottom:20px;}
+.newpost-content .goods-atta-item{clear:both; height:40px; line-height:40px;}
+.newpost-content .goods-atta-item .delete{width:30px; float:left;}
+.newpost-content .goods-atta-item .name{width:100px; float:left; margin-right:10px;}
+.newpost-content .goods-atta-item .value{overflow:hidden;}
+
+.uploadify-queue-item {height:30px; line-height:30px; padding:0; border-bottom:1px #eee solid; clear:both; position:relative;}
+.uploadify-queue-item .fileName{float:left; height:30px; line-height:30px; display:inline-block; z-index:100; position:relative;}
+.uploadify-queue-item .data{height:30px; line-height:30px; display:inline-block; overflow:hidden; z-index:100; position:relative;}
+.uploadify-queue-item .cancel{position:absolute; top:0; right:0; display:block; height:30px; width:30px; line-height:30px; text-align:center; font-size:18px; font-weight:bold; z-index:100;}
+.uploadify-queue-item .uploadify-progress{clear:both; z-index:0; position:absolute; top:0; left:0; height:100%; width:100%;}
+.uploadify-queue-item .uploadify-progress .uploadify-progress-bar{background:#0CF; display:inline-block; height:30px;}
+
+
+.upload-image{width:600px; background:#fff; border:1px #bbb solid; position:absolute; z-index:1005;}
+.upload-image .title{padding:10px; clear:both; font-size:16px; border-bottom:1px #ddd solid; position:relative;}
+.upload-image .title .close{font-size:30px; position:absolute; top:5px; right:10px; cursor:pointer;}
+.upload-image .content{padding:10px; min-height:400px; text-align:center;}
+.upload-image .upload-image-button{display:inline-block; margin-top:170px; height:40px; line-height:40px; font-size:16px; position:relative;
+background:#2EA2CC; color:#fff; border:1px #0074A2 solid; border-radius:3px; cursor:pointer; box-shadow:0 1px 2px 0 #0074A2; padding:0 20px;}
+.upload-image .upload-image-button .file{position:absolute; left:0; top:0; width:100%; height:100%; opacity:0; filter:alpha(opacity=0); cursor:pointer;}
+.upload-image .loading {line-height:40px; font-size:28px; text-align:center; margin-top:170px; display:none;}
+.upload-image .loading img{display:inline-block; vertical-align:-4px; margin-right:10px;}
+.upload-image .preview{padding:30px 0; display:none;}
+.upload-image .preview img {max-width:300px !important; border:0; cursor:pointer;}

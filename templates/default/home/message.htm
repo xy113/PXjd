@@ -1,0 +1,47 @@
+{template header_common}
+<div id="area">
+<div class="ui-message-warp" style="width:70%">
+	<div class="message-content">
+    	{if $type=='success'}
+    	<h3 class="message-detail message-success"><i class="icon">&#xf0156;</i>$msg</h3>
+        {elseif $type=='error'}
+        <h3 class="message-detail message-error"><i class="icon">&#xf0155;</i>$msg</h3>
+        {elseif $type=='warning'}
+        <h3 class="message-detail message-warning"><i class="icon">&#xf00b7;</i>$msg</h3>
+        {else}
+        <h3 class="message-detail message-information"><i class="icon">&#xf0142;</i>$msg</h3>
+        {/if}
+        {if $tips}<div class="message-tips" style="font-size:14px;">$tips</div>{/if}
+        {if $autoredirect}
+        <div class="message-tips">$lang[auto_redirect]</div>
+        {else}
+        <div class="message-tips">$lang[message_tips]</div>
+        {/if}
+        
+        <div class="message-links">
+        	{if $links}
+        	{loop $links $link}
+        	<a href="$link[url]"{if $link[target]} target="$link[target]"{/if}>$link[text]</a>
+           {/loop}
+           {else}
+           <a href="$forward">$lang[go_back]</a>
+           {/if}
+        </div>
+    </div>
+</div> 
+</div>
+{if $autoredirect}
+<script type="text/javascript">
+var second = 5;
+var timeid = setInterval(function(){
+	second--;
+	if(second<1){
+		clearTimeout(timeid);
+		window.location = '$forward';
+	}else {
+		$("#timer").text(second);
+	}
+},1000);
+</script>
+{/if}
+{template footer_common}

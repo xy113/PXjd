@@ -1,0 +1,131 @@
+{template header_home}
+<div id="mainFrame" class="tableView">
+	<form method="post" id="shopForm" enctype="multipart/form-data">
+    <input type="hidden" name="formsubmit" value="yes">
+    <input type="hidden" name="formhash" value="{FORMHASH}">
+	<div class="itemRow">
+        <div class="item-name">店铺名称</div>
+        <div class="item-input"><input type="text" class="input-text" maxlength="20"  name="shopnew[shopname]" value="$shop[shopname]" id="shopname"></div>
+        <div class="item-tips error" id="tips_shopname">请填写店铺名称，至少2个字</div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">联系电话</div>
+        <div class="item-input"><input type="text" class="input-text" maxlength="20"  name="shopnew[tel]" value="$shop[tel]" id="tel"></div>
+        <div class="item-tips"></div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">所在地区</div>
+        <div class="item-input">
+        	<select class="input-select" id="province" name="shopnew[province]">
+            	<option value="">选择省份</option>
+            </select>
+            <select class="input-select" id="city" name="shopnew[city]">
+            	<option value="">选择城市</option>
+            </select>
+        </div>
+        <div class="item-tips error" id="tips_district">请选择所在地区</div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">联系地址</div>
+        <div class="item-input"><input type="text" class="input-text" name="shopnew[address]" value="$shop[address]" id="address"></div>
+        <div class="item-tips error" id="tips_address">请填写联系地址</div>
+    </div>
+    {if $pic}
+    <div class="itemRow">
+    	<div class="item-name">&nbsp;</div>
+       <div class="item-input"><img style="width:120px; display:block;" src="{$pic}"></div>
+    </div>
+    {/if}
+    <div class="itemRow">
+    	 <input type="hidden" name="shopnew[pic]" value="$shop[pic]" id="shoppic">
+        <div class="item-name">店铺图片</div>
+        <div class="item-input"><input type="file" name="filedata" id="filedata"></div>
+        <div class="item-tips error" id="tips_pic">请选择一张图片以展示你的店铺</div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">店铺介绍</div>
+        <div class="item-input"><textarea class="textarea" style="height:150px;" name="shopnew[description]" id="description">{$shop[description]}</textarea></div>
+        <div class="item-tips error" id="tips_description">请简单介绍一下你的店铺及经营项目，至少10个字</div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">&nbsp;</div>
+        <div class="item-input"><input type="submit" class="submitButton" value="提交"></div>
+        <div class="item-tips"></div>
+    </div>
+    </form>
+</div>
+<script type="text/javascript">
+var optionhtml = '<option value="">请选择省份</option>';
+$.ajax({
+	url:'/?m=common&c=district&a=fetchdistrict&fid=0',
+	dataType:'json',
+	success: function(json){
+		if(json.errno == 0){
+			for(var k in json.data){
+				var optionitem = json.data[k];
+				optionhtml+= '<option idvalue="'+optionitem.id+'" value="'+
+				optionitem.name+'"'+((optionitem.name == "{$shop[province]}") ? '  selected="selected"' : '')+'>'+optionitem.name+'</option>';
+				
+			}
+			$("#province").html(optionhtml);
+			var province = $("#province").find("option:selected").attr("idvalue");
+			showCity(province);
+		}
+	}
+});
+$("#province").change(function(){
+	var province = $(this).find("option:selected").attr("idvalue");
+	showCity(province);
+});
+function showCity(province){
+	if(!province) return;
+	var Options = '<option value="">请选择城市</option>';
+	$.ajax({
+		url:'/?m=common&c=district&a=fetchdistrict&fid='+province,
+		dataType:'json',
+		success: function(json){
+			for(var k in json.data){
+				var optionitem = json.data[k];
+				Options+= '<option idvalue="'+optionitem.id+'" value="'+
+				optionitem.name+'"'+((optionitem.name == "$shop[city]") ? '  selected="selected"' : '')+'>'+optionitem.name+'</option>';
+				
+			}
+			$("#city").html(Options);
+		}
+	});
+}
+$("#shopForm").submit(function(){
+	if(($("#shopname").val()).length < 2){
+		$("#tips_shopname").show();
+		return false;
+	}else {
+		$("#tips_shopname").hide();
+	}
+	if(!$("#province").val() || !$("#city").val()){
+		$("#tips_district").show();
+		return false;
+	}else {
+		$("#tips_district").hide();
+	}
+	if(!$("#address").val()){
+		$("#tips_address").show();
+		return false;
+	}else {
+		$("#tips_address").hide();
+	}
+	if(!$("#filedata").val() && !$("#shoppic").val()){
+		$("#tips_pic").show();
+		return false;
+	}else {
+		$("#tips_pic").hide();
+	}
+	if(($("#description").val()).length < 10){
+		$("#tips_description").show();
+		return false;
+	}else {
+		$("#tips_description").hide();
+	}
+	return true;
+});
+</script>
+{template footer_home}

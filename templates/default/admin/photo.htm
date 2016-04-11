@@ -1,0 +1,40 @@
+{template header}
+<h2>照片管理</h2>
+<form method="post" action="">
+    <input type="hidden" name="formsubmit" value="yes" />
+    <input type="hidden" name="formhash" value="{FORMHASH}">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="listtable">
+<thead>
+  <tr>
+    <th width="45"><input type="checkbox" class="checkbox" onclick="DSXCMS.checkAll(this,'delete[]');">删?</th>
+    <th width="80">预览</th>
+    <th>名称</th>
+    <th width="100">大小</th>
+    <th width="100">类型</th>
+    <th width="120">上传时间</th>
+  </tr>
+ </thead>
+ <tbody>
+  <!--{loop $photolist $list}-->
+  <tr>
+    <td><input type="checkbox" class="checkbox" name="delete[]" value="$list[photoid]"></td>
+    <td><img src="{$list[thumb]}" width="60" height="60"></td>
+    <th>$list[name]</th>
+    <td>$list[size]</td>
+    <td>$list[type]</td>
+    <td>$list[uptime]</td>
+  </tr>
+  <!--{/loop}-->
+  </tbody>
+  <tfoot>
+  <tr>
+      <td colspan="6">
+          <span class="pages">$pages</span>
+          <input type="submit" class="button" value="删除">　 
+          <input type="button" class="button" value="$lang[refresh]" onclick="window.location.reload()">
+      </td>
+  </tr>
+ </tfoot>
+</table>
+ </form>
+{template footer}

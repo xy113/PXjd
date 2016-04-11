@@ -1,0 +1,10 @@
+{template post_title}
+<div class="newpost-item" id="p-content-body">
+	<textarea name="content" id="redactor" style="display:none; height:450px;">$content</textarea>
+    <link rel="stylesheet" type="text/css" href="/static/redactor/css/redactor2.css">
+    <script src="/static/redactor/redactor.js?{version}" type="text/javascript"></script>
+    <script type="text/javascript">
+    $("#redactor").redactor({'lang':'zh_cn','toolbar':'custom'});
+    </script>
+</div>
+{template post_attribute}

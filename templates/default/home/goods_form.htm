@@ -1,0 +1,108 @@
+{template header_home}
+<div id="mainFrame" class="tableView">
+	<form method="post" id="goodsForm">
+    <input type="hidden" name="formsubmit" value="yes">
+    <input type="hidden" name="formhash" value="{FORMHASH}">
+	<div class="itemRow">
+        <div class="item-name">商品名称</div>
+        <div class="item-input"><input type="text" class="input-text" maxlength="60"  name="goodsnew[name]" value="$goods[name]" id="goodsname"></div>
+        <div class="item-tips error" id="tips_name">请填写商品名称，至少2个字</div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">商品价格</div>
+        <div class="item-input"><input type="text" class="input-text" name="goodsnew[price]" value="$goods[price]" id="price"></div>
+        <div class="item-tips error" id="tips_price">请填写商品价格</div>
+    </div>
+	<div class="itemRow">
+        <div class="item-name">商品库存</div>
+        <div class="item-input"><input type="text" class="input-text" name="goodsnew[stock]" value="$goods[stock]" id="stock"></div>
+        <div class="item-tips error" id="tips_stock">请填写商品库存</div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">商品类目</div>
+        <div class="item-input">
+        	<select name="goodsnew[catid]" class="input-select"><option value="0">请选择</option>{$categoryoptions}</select>
+        </div>
+        <div class="item-tips error" id="tips_stock">请选择商品类目</div>
+    </div>
+    <div class="itemRow">	 
+        <div class="item-name">商品图片</div>
+        <div class="item-input" style="width:auto;">
+        <div id="imageUploadQueue">
+        {loop $pics $plist}
+        <div class="imageUploadItem"><img src="{$plist[url]}">
+        	<input type="hidden" value="{$plist[image]}" name="pic[]">
+        	<a class="delete icon" href="javascript:;" title="删除" onclick="$(this).parent().remove();">&#xf00b3;</a>
+        </div>
+        {/loop}
+        </div>
+        <a class="icon" href="javascript:;" id="selectFileButton">+添加图片</a>
+        </div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">商品描述</div>
+        <div class="item-input"><textarea class="textarea" style="height:200px;" name="description" id="description">{$goods[description]}</textarea></div>
+        <div class="item-tips error" id="tips_description">请简单描述一下你的商品，至少5个字</div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">&nbsp;</div>
+        <div class="item-input"><input type="submit" class="submitButton" value="提交"></div>
+        <div class="item-tips"></div>
+    </div>
+    </form>
+</div>
+<form id="uploadForm" method="post" enctype="multipart/form-data" action="/?m=common&a=uploadimage">
+<input name="filedata" id="filedata" type="file" style="opacity:0; visibility:visible; position:absolute; z-index:200;">
+</form>
+<script type="text/javascript">
+$("#selectFileButton").mouseover(function(){
+	$("#filedata").css({'left':$(this).offset().left,'top':$(this).offset().top,
+	'width':$(this).width(),'height':$(this).height()});
+});
+$("#filedata").change(function(){
+	$("#uploadForm").ajaxSubmit({
+		dataType:'json',
+		success:function(json){
+			if(json.errno == 0){
+				var del = $('<a class="delete icon" href="javascript:;" title="删除">&#xf00b3;</a>').bind('click',function(){
+					$(this).parent().remove();
+				});
+				var imageItem = $('<div class="imageUploadItem"><img src="'+json.data.url+'" />'+
+				'<input type="hidden" name="pic[]" value="'+json.data.attachment+'"></div>').append(del);
+				$("#imageUploadQueue").append(imageItem);
+			}else {
+				alert('上传失败('+json.error+')');
+			}
+		}
+	});
+});
+$("#goodsForm").submit(function(){
+	if(($("#goodsname").val()).length < 2){
+		$("#tips_name").show();
+		return false;
+	}else {
+		$("#tips_name").hide();
+	}
+	
+	if(!$("#price").val()){
+		$("#tips_price").show();
+		return false;
+	}else {
+		$("#tips_price").hide();
+	}
+	if(!$("#stock").val()){
+		$("#tips_stock").show();
+		return false;
+	}else {
+		$("#tips_stock").hide();
+	}
+	if(($("#description").val()).length < 10){
+		$("#tips_description").show();
+		return false;
+	}else {
+		$("#tips_description").hide();
+	}
+	return true;
+});
+</script>
+{template footer_home}

@@ -1,0 +1,37 @@
+{template header}
+<h2>评论管理</h2>
+<form name="comment" id="comment" method="post">
+<input type="hidden" name="formsubmit" value="yes" />
+<input type="hidden" name="formhash" value="{FORMHASH}">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="listtable">
+<thead>
+  <tr>
+    <th width="30"><input type="checkbox" class="checkbox" onclick="DSXCMS.checkAll(this,'delete[]');"></th>
+    <th>评论内容</th>
+  </tr>
+ </thead>
+ <tbody>
+ {loop $commentlist $k $comm}
+  <tr>
+    <td><input type="checkbox" class="checkbox" name="delete[]" value="$comm[commid]"></td>
+    <td><p class="comment-content">$comm[message]</p><div class="comment-attr">$comm[pubtime]</div></td>
+  </tr>
+  {/loop}
+  </tbody>
+  <tfoot>
+  <tr>
+  	<td colspan="2">
+    	<input type="checkbox" class="checkbox" name="delete[]" value="0" node="checkall"> 全选
+    </td>
+  </tr>
+  <tr>
+      <td colspan="2">
+          <span class="pagebox">$pages</span>
+          <input type="submit" class="button" value="删除">　 
+          <input type="button" class="button" value="刷新" onclick="window.location.reload()">
+      </td>
+  </tr>
+ </tfoot>
+</table>
+</form>
+{template footer}

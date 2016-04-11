@@ -1,0 +1,33 @@
+{template header_home}
+<div id="mainFrame" class="tableView">
+	{if !$shop}
+    <div style="margin:50px 0; text-align:center; font-size:18px; color:#666;">
+    	你还没有店铺，<a href="/?m=home&c=shop&a=create">马上创建一个</a>
+    </div>
+    {else}
+	<div class="itemRow">
+        <div class="item-name">店铺名称</div>
+        <div class="item-input">{$shop[shopname]} &nbsp;&nbsp;<a href="/?m=home&c=shop&a=edit&shopid=$shop[shopid]">编辑</a></div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">联系电话</div>
+        <div class="item-input">$shop[tel]</div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">所在地区</div>
+        <div class="item-input">{$shop[province]}  {$shop[city]}</div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">联系地址</div>
+        <div class="item-input">$shop[address]</div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">店铺介绍</div>
+        <div class="item-input">$shop[description]</div>
+    </div>
+    <div class="itemRow">
+    	<img src="$shop[pic]" style="width:300px; display:block; margin-left:30px;">
+    </div>
+    {/if}
+</div>
+{template footer_home}

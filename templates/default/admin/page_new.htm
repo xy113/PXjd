@@ -1,0 +1,69 @@
+{template header}
+{if $G[op]=='edit'}
+<h2>编辑页面</h2>
+{else}
+<h2>新建页面</h2>
+{/if}
+{eval $token = sha1($G[uid].$G[username].formhash());}
+<script type="text/javascript" src="/static/editor/jquery.UBBEditor.js?{TIMESTAMP}"></script>
+<script type="text/javascript" src="/static/uploadify/jquery.uploadify-3.1.min.js"></script>
+<form method="post" action="">
+    <input type="hidden" name="formsubmit" value="yes" />
+    <input type="hidden" name="formhash" value="{FORMHASH}">
+    <div class="pages-left-frame">
+    	<div class="pages-content">
+        <input type="text" name="newpage[title]" class="pages-title-input" placeholder="在此输入标题" value="$page[title]">
+        </div>
+        <div class="pages-content">{template editor}</div>
+    </div>
+    <div class="pages-right-frame">
+    	<!--<div class="pages-content">
+        	<div class="subdiv">
+            	<div class="handle">图像</div>
+                <div class="content"><a href="javascript:;" id="upload-image"><span class="icon">&#xf0154;</span>添加文章图片<input class="file" name="" type="file"></a></div>
+            </div>
+        </div>-->
+        <div class="pages-content">
+        	<div class="subdiv">
+            	<div class="handle">别名</div>
+                <div class="content"><input type="text" class="text input-text" name="newpage[alias]" value="$page[alias]" /></div>
+            </div>
+        </div>
+    	<div class="pages-content">
+        	<div class="subdiv">
+            	<div class="handle">分类</div>
+                <div class="content">
+                    <select class="select" name="newpage[catid]" id="catid">
+                        {loop $categorylist $clist}
+                        <option value="$clist[pageid]"{if $clist[pageid]==$page[catid]} selected="selected"{/if}>$clist[title]</option>
+                        {/loop}
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="pages-content">
+        	<div class="subdiv">
+            	<div class="handle">模板</div>
+                <div class="content"><input type="text" class="text input-text" name="newpage[template]" value="$page[template]" /></div>
+            </div>
+        </div>
+        
+        <div class="pages-content">
+        	<div class="subdiv">
+            	<div class="handle">发布</div>
+                <div class="content">
+                	  	{if $G[op]=='edit'}
+                      <input type="submit" class="button" value="更新" /> 
+                      {else}
+                	  	<input type="submit" class="button" value="发布" /> 
+                      {/if}
+                    	&nbsp;&nbsp; 
+                    <input type="button" class="button" value="刷新" onclick="window.location.reload()" />
+                </div>
+            </div>
+        </div>
+    </div>
+ </form>
+ <div class="clearfix"></div>
+{template footer}

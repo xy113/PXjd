@@ -1,0 +1,38 @@
+{template home_header}
+{if $articlelist}
+<div class="area">
+<form method="post" name="posts" autocomplete="off">
+<input type="hidden" name="formsubmit" value="yes">
+<input type="hidden" name="formhash" value="{FORMHASH}">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="listtable">
+  <tr>
+    <th width="30"><input type="checkbox" onclick="DSXCMS.checkAll(this,'delete[]')"></th>
+    <th>标题</th>
+    <th width="50">点击</th>
+    <th width="130">发布时间</th>
+    <th width="50">编辑</th>
+  </tr>
+  {loop $articlelist $k $article}
+  {eval $article[pubtime]=@date('Y-m-d H:i',$article[pubtime]);}
+  <tr>
+    <td><input type="checkbox" name="delete[]" value="$article[id]"></td>
+    <td><a href="/?m=post&c=detail&id=$article[id]" target="_blank">$article[title]</a></td>
+    <td>$article[viewnum]</td>
+    <td>$article[pubtime]</td>
+    <td><a href="/?m=home&c=post&op=edit&id=$article[id]">编辑</a></td>
+  </tr>
+  {/loop}
+  <tr>
+    <td colspan="5">
+        <span class="pages">$pages</span>
+       <button class="button submit" type="submit">删除</button>
+       <button class="button" type="button" onclick="window.location.reload()">刷新</button>
+    </td>
+  </tr>
+</table>
+</form>
+</div>
+{else}
+<div class="noaccess">您还没有发布过任何文章哦，<a href="/?m=home&c=post&op=publish">马上发布</a></div>
+{/if}
+{template home_footer}

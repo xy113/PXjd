@@ -1,0 +1,38 @@
+{template weixin_header}
+<div id="research">
+<form method="post">
+<input type="hidden" name="formsubmit" value="yes">
+<input type="hidden" name="formhash" value="{FORMHASH}">
+<input type="hidden" name="paperid" value="$paperid">
+{eval $orderno=1;}
+{loop $subjectlist $subject}
+	<h3 class="title">{$orderno}、$subject[subject]</h3>
+    
+    {if $subject[valuetype]=='radio'}
+    {loop $subject[options] $option}
+    <div class="option">
+       <label><input type="radio" class="radio" name="answers[{$subject[id]}]" value="$option[optionkey]"> $option[optionname]</label>
+    </div>
+    {/loop}
+    {/if}
+    {if $subject[valuetype]=='checkbox'}
+    {loop $subject[options] $option}
+    <div class="option">
+       <label><input type="checkbox" class="checkbox" name="answers[{$subject[id]}][]" value="$option[optionkey]"> $option[optionname]</label>
+    </div>
+    {/loop}
+    {/if}
+    {if $subject[valuetype]=='text'}
+          <div class="input"><input type="text" class="input-text" name="answers[{$subject[id]}]"></div>
+     {/if}
+     
+     {if $subject[valuetype]=='textarea'}
+          <div class="input"><textarea class="textarea" name="answers[{$subject[id]}]"></textarea></div>
+     {/if}
+    {eval $orderno++;}
+{/loop}
+	<div style="padding:20px 0;"><button class="bigbutton" type="submit">交卷</button></div>
+    </form>
+</div>
+{template weixin_tabbar}
+{template weixin_footer}

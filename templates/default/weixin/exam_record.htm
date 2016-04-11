@@ -1,0 +1,20 @@
+{template weixin_header}
+<div id="weixin">
+	<table cellpadding="0" cellspacing="0" width="100%" class="listtable">
+    	<tr>
+        	<th>考试项目</th>
+           <th width="60">考试时间</th>
+           <th width="40"><center>成绩</center></th>
+        </tr>
+        {loop $recordlist $list}
+        {eval $examtime=@date('y/m/d',$list[starttime]);}
+        <tr>
+        	<th><a href="/?m=weixin&c=exampaper&a=viewpaper&recordid=$list[recordid]">{$paperlist[$list[paperid]][name]}</a></th>
+           <td>$examtime</td>
+           <td><center>$list[score]</center></td>
+        </tr>
+        {/loop}
+    </table>
+</div>
+{template weixin_tabbar}
+{template weixin_footer}

@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>{$G[title]} - {$G[setting][sitename]}</title>
+<meta name="keywords" content="{$G[keywords]}">
+<meta name="description" content="{$G[description]}">
+<link rel="icon" href="/static/images/common/favicon.ico">
+<link rel="stylesheet" type="text/css" href="/static/css/common.css">
+<link rel="stylesheet" type="text/css" href="/static/css/exam.css">
+<script src="/static/js/jquery.js" type="text/javascript"></script>
+<script src="/static/js/common.js" type="text/javascript"></script>
+<script src="/static/js/jquery.form.js" type="text/javascript"></script>
+<script src="/static/js/jquery.dsxui.js" type="text/javascript"></script>
+<script src="/static/js/jquery-ui-1.10.4.custom.min.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="paper">
+<h1>$paper_config[name]</h1>
+<p class="tips">提示:$paper_config[tips]</p>
+<form method="post" id="paperForm">
+<input type="hidden" name="formhash" value="{FORMHASH}">
+<input type="hidden" name="formsubmit" value="yes">
+<input type="hidden" name="uid" value="$G[uid]">
+<input type="hidden" name="recordid" value="$record[recordid]">
+{loop $paper_types $type}
+<div id="type_{$type[typeid]}">
+<h1>$type[typename]</h1>
+	<div class="content" id="content_{$type[typeid]}">
+    {eval $orderno=1;}
+	{loop $subjectlist[$type[typeid]] $subject}
+    <h3 id="subject_$subject[id]">{$orderno}、{$subject[subject]}</h3>
+    <div class="div">
+    	{if $subject[valuetype]=='radio'}
+       		{loop $optionlist[$subject[id]] $option}
+           <div class="option"><input type="radio" name="answers[{$subject[id]}]" value="$option[optionkey]" onclick="selectRadio({$subject[id]});"> $option[optionname]</div>
+           {/loop}
+       {/if}
+       {if $subject[valuetype]=='checkbox'}
+       		{loop $optionlist[$subject[id]] $option}
+           <div class="option"><input type="checkbox" name="answers[{$subject[id]}][]" value="$option[optionkey]" onclick="selectCheckbox({$subject[id]});"> $option[optionname]</div>
+           {/loop}
+       {/if}
+       
+       {if $subject[valuetype]=='yesorno'}
+           <div class="option">
+           	<input type="radio" name="answers[{$subject[id]}]" value="Y" onclick="selectRadio({$subject[id]});"> 是&nbsp;&nbsp;&nbsp;&nbsp;
+            	<input type="radio" name="answers[{$subject[id]}]" value="N" onclick="selectRadio({$subject[id]});"> 否
+           </div>
+       {/if}
+       
+       {if $subject[valuetype]=='text'}
+       		<div class="input"><input type="text" class="input-text" name="answers[{$subject[id]}]" onKeyUp="checkInput(this,{$subject[id]});"></div>
+       {/if}
+       
+       {if $subject[valuetype]=='textarea'}
+       		<div class="input"><textarea class="textarea" name="answers[{$subject[id]}]" onKeyUp="checkInput(this,{$subject[id]});"></textarea></div>
+       {/if}
+    </div>
+    {eval $orderno++;}
+    {/loop}
+    </div>
+</div>
+{/loop}
+<div class="bottom"><a href="javascript:;" class="submitbutton" onclick="submitPaper();">交卷</a></div>
+</form>
+</div>
+
+
+<div id="leftmenu">
+{loop $paper_types $type}
+<h3><a href="javascript:;" onclick="windowScrollTo('#type_$type[typeid]');">$type[typename]</a></h3>
+{/loop}
+</div>
+
+<div id="rightmenu">
+<h3 class="timelength">答题时间:$paper_config[timelength]分钟</h3>
+<div class="timelast">剩余时间:<span id="timelast"></span></div>
+<div class="subjectbox">
+{loop $paper_types $type}
+<h4>$type[typename]</h4>
+<div class="boxdiv">
+    	{eval $no=1;}
+    	{loop $subjectlist[$type[typeid]] $subject}
+       <a class="box" id="box_$subject[id]" href="javascript:;" onclick="windowScrollTo('#subject_$subject[id]');">$no</a>
+       {eval $no++;}
+       {/loop}
+</div>
+{/loop}
+</div>
+</div>
+<script type="text/javascript">
+function submitPaper(){
+	if( confirm('交卷后答题将不可再修改，你确定现在交卷吗?')){
+		$("#paperForm").submit();
+	}
+}
+function windowScrollTo(el){
+	$(document).scrollTop($(el).offset().top);
+}
+
+var nowtime   = Math.ceil(parseInt(new Date().getTime())/1000);
+var systime   = {TIMESTAMP};
+var totaltime = {$paper_config[timelength]}*60;
+//var timelast = Math.ceil(parseInt(new Date().getTime())/1000) - $record[starttime];
+var timelast = totaltime - (nowtime - $record[starttime]) + (nowtime - systime);
+setInterval(function(){
+	timelast--;
+	if(timelast < 1){
+		$("#paperForm").submit();
+		return;
+	}
+	$("#timelast").text(formatTime(timelast));
+},1000);
+function formatTime(time){
+	//return Math.ceil(time/60-1)+'分'+(time%60)+'秒';
+	return Math.floor(time/60)+'分'+(time%60)+'秒';
+}
+
+function  selectRadio(id){
+	if($("[name='answers["+id+"]']:checked").length > 0){
+		$("#box_"+id).addClass('checked');
+	}else {
+		$("#box_"+id).removeClass('checked');
+	}
+}
+
+function selectCheckbox(id){
+	if($("[name='answers["+id+"][]']:checked").length > 0){
+		$("#box_"+id).addClass('checked');
+	}else {
+		$("#box_"+id).removeClass('checked');
+	}
+}
+
+function checkInput(o,id){
+	var value = $(o).val();
+	if($.trim(value).length > 0){
+		$("#box_"+id).addClass('checked');
+	}else {
+		$("#box_"+id).removeClass('checked');
+	}
+}
+</script>
+</body>
+</html>

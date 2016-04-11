@@ -1,0 +1,12 @@
+{template weixin_header}
+<div class="wxmessage">
+	<h3 class="$type">$msg</h3>
+    <div class="buttondiv">
+    	{if $links}
+    	<a class="back-button" href="$links[0][url]">$links[0][text]</a>
+       {else}
+       <a class="back-button" href="$forward">返回</a>
+       {/if}
+    </div>
+</div> 
+{template weixin_footer}

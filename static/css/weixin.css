@@ -1,0 +1,118 @@
+/* CSS Document */
+* {outline: 0px solid transparent; -webkit-tap-highlight-color: rgba(0,0,0,0); -webkit-touch-callout: none; -webkit-appearance: none;}
+input,button{white-space:nowrap;}
+.navbar{position:relative; max-width:750px; margin-bottom:10px; height:50px; z-index:1000;}
+.tabbar{bottom:0px; position:relative; height:50px; margin-top:10px; z-index:1000;}
+.navbar .bar,.tabbar .bar{width:100%; height:49px; position:fixed; max-width:750px; background:#fff; border-bottom:1px #DDD solid;}
+.tabbar .bar{bottom:0px; border-bottom:none; border-top:1px #DDD solid;}
+
+.tabbar .tab{width:33%; float:left; border-right:1px #e5e5e5 solid; height:50px; text-align:center;}
+.tabbar .tab .menu{display:block; text-align:center; line-height:50px; font-size:14px;}
+#member{padding:10px;}
+#member h1{font-size:20px; text-align:center; margin:5px 0;}
+#member .item{padding:5px 10px; margin:5px 0;}
+#member .input-text{box-sizing:border-box; height:40px; font-size:16px; box-sizing:border-box; border-radius:2px;
+padding:3px 5px; width:100%; border-style:solid; border-width:1px; border-color:#666 #CCC #CCC #666; background:#FAFAFA;}
+#member .captcha{vertical-align:14px; margin-right:10px; width:50%;}
+#member .login-button{width:100%; height:40px; line-height:40px; background:#093; color:#fff; border-radius:3px;
+text-align:center; font-size:14px; border:0;}
+#member .login-button:hover{background:#083;}
+
+#profile{overflow:hidden; background:#f0f0f0; color:#060;}
+#profile *{color:#060;}
+#profile .mheader{background:#093; height:160px; padding:30px 0 0; color:#fff;}
+#profile .mheader .avatar{width:100px; height:100px; clear:both; margin:0 auto;}
+#profile .mheader .avatar img{border:5px #fff solid; border-radius:90px; width:90px; height:90px; min-height:0; display:block;}
+#profile .mheader .username{display:block; margin:10px auto 0 auto; font-size:18px; text-align:center; color:#fff;}
+#profile .box{width:49.5%; color:#060; float:left; margin:-1px 0 0 -1px; background:#fff; height:70px; padding:10px 0 15px; border:1px #ddd solid;}
+#profile .box .icon{width:35px; height:35px; margin:0 auto; clear:both; font-size:30px;}
+#profile .box .title{margin-top:8px; font-size:18px; text-align:center;}
+#profile .box-hd{position:relative; overflow:hidden; width:101%;}
+#profile .content{padding:20px 10px; margin-top:20px; border-top:1px #DDD solid; border-bottom:1px #DDD solid; background:#fff;}
+#profile .content h3{font-size:20px; height:30px;}
+#profile .content h3 .icon{width:25px; height:25px; font-size:30px; display:block; float:left; margin:-10px 10px 0 0;}
+#profile .listtable{box-sizing:border-box; clear:both; margin-top:5px;}
+#profile .listtable td,#profile .listtable th{font-size:14px; text-align:left; padding:7px 10px 7px 0; border-bottom:1px #e5e5e5 solid;}
+
+
+.wxmessage{padding:0px 10px; margin-top:25%;}
+.wxmessage h3{font-size:16px; color:#060; text-align:center;}
+.wxmessage .buttondiv{margin-top:30px;}
+.wxmessage .back-button{background:#093; color:#fff; font-size:16px; height:45px; line-height:45px; text-align:center;
+border-radius:3px; display:block; width:100%; box-sizing:border-box;}
+.wxmessage .back-button:hover{background:#083;}
+
+#exampaper{font-size:16px; position:relative; width:100%; height:100%; display:block; z-index:1;}
+#exampaper .content{background:#fff; padding:10px; box-sizing:border-box; overflow:hidden; 
+position:absolute; width:100%; min-height:100%; display:none; z-index:10;}
+#exampaper .content h1{margin-top:30%; text-align:center;}
+#exampaper .content h3{font-size:16px; margin:0px 0 10px;}
+#exampaper .content .div{clear:both;}
+#exampaper .content .option{margin:5px 0; font-size:15px;}
+#exampaper .content .option .radio,#exampaper .content .option .checkbox{width:20px; height:20px; vertical-align:-6px;}
+#exampaper .content .option .radio{border-radius:10px;}
+#exampaper .content .option label{display:block; padding:7px 5px; border-radius:5px; background:#efefef;}
+#exampaper .content .input-text,#exampaper .content .textarea{border-style:solid; border-color:#666 #ccc #ccc #666;
+border-width:1px; width:100%; box-sizing:border-box; height:40px; padding:0 5px;}
+#exampaper .content .textarea{padding:5px; height:300px;}
+#exampaper .subjectlist{}
+#exampaper .subjectlist .subjectbox{width:35px; height:35px; border:1px #fff solid; background:#e5e5e5;
+float:left; margin:-1px 0 0 -1px; text-align:center; line-height:36px; cursor:pointer;}
+#exampaper .subjectlist .checked{background:#060; color:#fff;}
+#exampaper .button-hd{margin-top:30px;}
+#exampaper .bigbutton{width:100%; box-sizing:border-box; font-size:16px; color:#fff; text-align:center; height:45px;
+line-height:45px; background:#093; border-radius:5px; display:block; font-weight:bold; border:0;}
+#exampaper .answer{font-size:16px; margin-bottom:10px; color:#060; font-weight:bold;}
+#exampaper .tips{padding:5px 0;}
+.showall{position:fixed; z-index:1000; right:0; bottom:20px; width:30px; height:30px; display:block; font-size:30px; cursor:pointer;}
+
+#examhome{padding:30px 10px;}
+#examhome h3{font-size:18px;}
+#examhome p{font-size:15px; margin:10px 0;}
+#examhome .bigbutton{width:100%; box-sizing:border-box; font-size:15px; color:#fff; text-align:center; height:45px;
+line-height:45px; background:#093; border-radius:5px; display:block; font-weight:bold;}
+#examhome .bigbutton:hover{background:#083；}
+
+#weixin{padding:10px;}
+#weixin h3.title{font-size:18px;}
+#weixin .content{margin:10px 0; font-size:16px; text-align:justify;}
+#weixin .button-hd{margin-top:30px;}
+#weixin .bigbutton{width:100%; box-sizing:border-box; font-size:16px; color:#fff; text-align:center; height:45px;
+line-height:45px; background:#093; border-radius:5px; display:block; font-weight:bold; border:0;}
+#weixin .bigbutton:hover{background:#083；}
+#weixin .sign{text-align:center;}
+#weixin .listtable{box-sizing:border-box; clear:both;}
+#weixin .listtable td,#weixin .listtable th{font-size:14px; text-align:left; padding:7px 10px 7px 0; border-bottom:1px #e5e5e5 solid;}
+#weixin .rowItem{clear:both;}
+#weixin .rowItem h3{font-size:16px; padding:5px 0;}
+#weixin .rowItem .inputdiv{}
+#weixin .rowItem .input-text{height:40px; line-height:40px; padding:0 5px; border:1px #ccc solid; box-sizing:border-box;
+width:100%; font-size:16px; background:#f5f5f5; box-shadow:none;}
+#weixin .rowItem .select{height:40px; line-height:40px; font-size:16px; width:100%; box-sizing:border-box;}
+
+.avatar{height:20%; display:block; overflow:hidden;}
+.avatar img{width:100%; min-height:100%; border:0; display:block;}
+#home{padding:0;}
+#home li{height:50px; line-height:50px; overflow:hidden; border-bottom:1px #e0e0e0 solid; position:relative;}
+#home li a{display:block; padding:0 10px; font-size:18px;}
+#home li .icon{float:right; color:#999; margin-right:10px;}
+
+#research{padding:10px;}
+#research h3.title{font-size:16px; margin:5px 0;}
+#research .option{margin:5px 0; font-size:16px;}
+#research .option label{padding:7px; display:block; background:#f5f5f5; border-radius:5px;}
+#research .option .radio{width:20px; height:20px; border-radius:10px; vertical-align:-6px; white-space:nowrap;}
+#research .option .checkbox{width:20px; height:20px; vertical-align:-6px; white-space:nowrap;}
+#research .input-text,#exampaper .content .textarea{border-style:solid; border-color:#666 #ccc #ccc #666;
+border-width:1px; width:100%; box-sizing:border-box; height:40px; padding:0 5px;}
+#research .textarea{padding:5px; height:300px;}
+
+.bigbutton{width:100%; box-sizing:border-box; font-size:16px; color:#fff; text-align:center; height:45px;
+line-height:45px; background:#093; border-radius:5px; display:block; font-weight:bold; border:0;}
+
+.sign{display:block;}
+.sign .row{padding:7px 10px; display:block; border-bottom:1px #E5E5E5 solid;}
+.sign .textarea{border:1px #ddd solid; width:100%; height:100px; box-sizing:border-box; padding:5px; font-size:14px;}
+.sign .file{display:block; width:100%; height:100%; opacity:0; position:absolute; text-align:center; left:0; top:0; z-index:100;}
+.sign .addphoto{font-size:16px; position:relative;}
+.sign .addphoto .icon{font-size:22px;}

@@ -1,0 +1,48 @@
+<?php if (!defined('IN_DSXCMS')) die('Access Denied!');?><?php include template('header_home'); ?><div id="mainFrame" class="tableView">
+  <form id="form" method="post" autocomplete="off">
+  	<input type="hidden" name="formsubmit" value="yes">
+    <input type="hidden" name="formhash" value="<?php echo FORMHASH;?>">
+    <div class="itemRow">
+        <div class="item-name">原密码</div>
+        <div class="item-input"><input type="password" class="input-text" name="password"></div>
+        <div class="item-tips">请输入原密码</div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">新密码</div>
+        <div class="item-input"><input type="password" class="input-text" name="newpassword"></div>
+        <div class="item-tips">请输入新密码</div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">确认密码</div>
+        <div class="item-input"><input type="password" class="input-text" name="newpassword2"></div>
+        <div class="item-tips">请再次输入新密码</div>
+    </div>
+    <div class="itemRow item-button">
+        <div class="item-name">&nbsp;</div>
+        <div class="item-input"><button type="submit" class="input-button" name="button">修改密码</button></div>
+    </div>
+    </form>
+</div>
+<script type="text/javascript">
+;(function(){
+	$("#form").submit(function(){
+		var password = $("[name=password]").val();
+		var newpassword = $("[name=newpassword]").val();
+		var newpassword2 = $("[name=newpassword2]").val();
+		$("#error").empty().hide();
+		if(!DSXCMS.IsPassword(password)){
+			$("#error").text('原密码输入错误').show();
+			return false;
+		}
+		if(!newpassword || !DSXCMS.IsPassword(newpassword)){
+			$("#error").text('新密码输入错误').show();
+			return false;
+		}
+		if(newpassword2 != newpassword){
+			$("#error").text('两次密码输入不一致').show();
+			return false;
+		}
+		return true;
+	});
+})();  
+</script><?php include template('footer_home'); ?>

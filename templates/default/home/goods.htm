@@ -1,0 +1,45 @@
+{template header_home}
+<div id="mainFrame">
+	<form method="post" autocomplete="off">
+    <input type="hidden" name="formsubmit" value="yes">
+    <input type="hidden" name="formhash" value="{FORMHASH}">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0" class="listtable goodslist">
+      <thead>
+      <tr>
+        <th width="30"><input type="checkbox" class="checkbox"></th>
+        <th width="100">图片</th>
+        <th>商品名称</th>
+        <th width="60">价格</th>
+        <th width="50">已售</th>
+        <th width="50">库存</th>
+        <th width="110">上架时间</th>
+      </tr>
+      </thead>
+      <tbody>
+      {loop $goodslist $id $list}
+      <tr>
+        <td><input type="checkbox" value="{$id}" name="gid[]"></td>
+        <td><div class="pic"><img src="{$list[pic]}"></div></td>
+        <td>
+        	<h3><a href="/?m=goods&c=detail&id={$id}" target="_blank">{$list[name]}</a></h3>
+           <p><a href="/?m=home&c=goods&a=edit&id={$id}">编辑</a> <a href="/?m=goods&c=detail&id={$id}" target="_blank">查看</a></p>
+        </td>
+        <td>{$list[price]}</td>
+        <td>{$list[sold]}</td>
+        <td>{$list[stock]}</td>
+        <td>{$list[dateline]}</td>
+      </tr>
+      {/loop}
+      </tbody>
+      <tfoot>
+      <tr>
+        <td colspan="8" style="padding:15px 10px;">
+        	<div class="pages">{$pages}</div>
+           <input type="submit" class="button submit" value="删除">
+        </td>
+      </tr>
+      </tfoot>
+    </table>
+    </form>
+</div>
+{template footer_home}

@@ -1,0 +1,127 @@
+{template header}
+<h2>管理组</h2>
+<form method="post" action="" autocomplete="off">
+    <input type="hidden" name="formsubmit" value="yes" />
+    <input type="hidden" name="formhash" value="{FORMHASH}" />
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="listtable">
+    <thead>
+    <tr>
+      <th width="30">GID</th>
+      <th width="100">组名称</th>
+      <th>组权限</th>
+    </tr>
+    </thead>
+    <tbody>
+    {loop $usergrouplist $k $group}
+    {if $group[type]=='system'}
+    <tr>
+      <td>$group[gid]</td>
+      <td>$group[title]</td>
+      <td style="line-height:1.5;">
+        {loop $lang[adminperms] $k=>$v}
+        <input type="checkbox" value="1" name="usergroup[{$group[gid]}][perm][$k]"{if $group[perm][$k]} checked="checked"{/if}>$v
+        {/loop}
+      </td>
+    </tr>
+    {/if}
+    {/loop}
+    </tbody>
+    <tfoot>
+    <tr>
+        <td colspan="3">
+            <input type="submit" class="button" value="提交" />　
+            <input type="button" class="button" value="刷新" onclick="window.location.reload()" />
+        </td>
+    </tr>
+    </tfoot>
+  </table>
+ </form>
+<h2>用户组</h2>
+<form method="post" name="form2" id="formop" action="" autocomplete="off">
+    <input type="hidden" name="formsubmit" value="yes" />
+    <input type="hidden" name="formhash" value="{FORMHASH}" />
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="listtable">
+    <thead>
+    <tr>
+      <th width="20"><input type="checkbox" class="checkbox" node="checkall" name="gid[]" value="0" /></th>
+      <th width="30">GID</th>
+      <th width="100">组名称</th>
+      <th width="100">积分下线</th>
+      <th width="100">积分上限</th>
+      <th>组权限</th>
+    </tr>
+    </thead>
+    <tbody id="tbcontent">
+    {loop $usergrouplist $k $group}
+    {if $group[type]=='member'}
+    <tr>
+      <td><input type="checkbox" name="gid[]" value="$group[gid]" /></td>
+      <td>$group[gid]</td>
+      <td><input type="text" class="text text200" name="usergroup[{$group[gid]}][title]" value="$group[title]" maxlength="10"></td>
+      <td><input type="text" class="text text100" name="usergroup[{$group[gid]}][creditslower]" value="$group[creditslower]" maxlength="10"></td>
+      <td><input type="text" class="text text100" name="usergroup[{$group[gid]}][creditshigher]" value="$group[creditshigher]" maxlength="10"></td>
+      <td style="line-height:1.5;">
+        {loop $lang[member_perms] $k=>$v}
+        <input type="checkbox" value="1" name="usergroup[{$group[gid]}][perm][$k]"{if $group[perm][$k]} checked="checked"{/if}>$v
+        {/loop}
+      </td>
+    </tr>
+    {/if}
+    {/loop}
+    </tbody>
+    <tfoot>
+    <tr>
+    	<td></td>
+        <td colspan="5"><a href="javascript:;" id="newgroup"><i class="icon">&#xf0154;</i>添加新分组</a></td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <input type="checkbox" class="checkbox"  node="checkall" name="gid[]" value="0" /> 删除
+        </td>
+    </tr>
+    <tr>
+        <td colspan="6">
+            <span class="pagebox">{$pagelink}</span>
+            <input type="submit" class="button" value="提交" />　
+            <input type="button" class="button" value="刷新" onclick="window.location.reload()" />
+        </td>
+    </tr>
+    </tfoot>
+  </table>
+ </form>
+<script type="text/html" id="rowtpl">
+<tr>
+  <td></td>
+  <td></td>
+  <td><input type="text" class="text text200" name="newgroup[nkey][title]" value="" maxlength="10"></td>
+  <td><input type="text" class="text text100" name="newgroup[nkey][creditslower]" value="" maxlength="10"></td>
+  <td><input type="text" class="text text100" name="newgroup[nkey][creditshigher]" value="" maxlength="10"></td>
+  <td>
+  	{loop $lang[member_perms] $k=>$v}
+	<input type="checkbox" value="1" name="newgroup[nkey][perm][$k]">$v 
+	{/loop}
+  </td>
+</tr>
+</script>
+<script type="text/javascript">
+var nkey = 0;
+$("#newgroup").click(function(){
+	nkey++;
+	$("#tbcontent").append($("#rowtpl").html().replace(/nkey/g,nkey));
+});
+$("input[node=checkall]").click(function(){
+	if($(this).is(":checked")){
+		$("input[name='gid[]']").attr('checked',true);
+	}else{
+		$("input[name='gid[]']").attr('checked',false);
+	}
+});
+$("#formop").submit(function(){
+	if($(this).find("input[name=delete]:checked").val() == 1){
+		return confirm("您确定要删除所选内容吗？\n信息删除后将无法恢复");
+	}else{
+		return true;
+	}
+});
+</script>
+{template footer}

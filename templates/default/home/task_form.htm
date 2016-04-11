@@ -1,0 +1,160 @@
+{template header_home}
+<div id="mainFrame" class="tableView">
+	<form method="post" id="taskForm">
+    <input type="hidden" name="formsubmit" value="yes">
+    <input type="hidden" name="formhash" value="{FORMHASH}">
+	<div class="itemRow">
+        <div class="item-name">需求项目</div>
+        <div class="item-input"><input type="text" class="input-text" maxlength="60"  name="tasknew[title]" value="$task[title]" id="task_title"></div>
+        <div class="item-tips error" id="tips_title">请填写需求项目，至少2个字</div>
+    </div>
+	<div class="itemRow">
+        <div class="item-name">联系方式</div>
+        <div class="item-input"><input type="text" class="input-text" name="tasknew[contact]" value="$task[contact]" id="task_contact"></div>
+        <div class="item-tips error" id="tips_contact">请填写联系方式</div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">需求分类</div>
+        <div class="item-input">
+        	<select name="tasknew[catid]" id="task_category" class="input-select"><option value="0">选择分类目录</option>{$categoryoptions}</select>
+        </div>
+        <div class="item-tips error" id="tips_category">请选择需求类目</div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">所在地区</div>
+        <div class="item-input">
+        	<input type="hidden" name="tasknew[province]" id="task_province" value="$task[province]">
+           <input type="hidden" name="tasknew[city]" id="task_city" value="$task[city]">
+        	<select id="select_province" class="input-select"><option value="0">选择省份</option></select>
+           <select id="select_city" class="input-select"><option value="0">选择城市</option></select>
+        </div>
+        <div class="item-tips error" id="tips_district">请选择所在地区</div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">详细地址</div>
+        <div class="item-input">
+        	<input type="text" class="input-text" name="tasknew[address]" value="$task[address]" id="task_address">
+        </div>
+        <div class="item-tips error" id="tips_address">请填写详细地址</div>
+    </div>
+    <div class="itemRow">	 
+        <div class="item-name">上传图片</div>
+        <div class="item-input" style="width:auto;">
+        <div id="imageUploadQueue">
+        {loop $pics $plist}
+        <div class="imageUploadItem"><img src="{$plist[url]}">
+        	<input type="hidden" value="{$plist[image]}" name="pic[]">
+        	<a class="delete icon" href="javascript:;" title="删除" onclick="$(this).parent().remove();">&#xf00b3;</a>
+        </div>
+        {/loop}
+        </div>
+        <a class="icon" href="javascript:;" id="selectFileButton">+添加图片</a>
+        </div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">需求说明</div>
+        <div class="item-input"><textarea class="textarea" style="height:200px;" name="tasknew[content]" id="task_content">{$task[content]}</textarea></div>
+        <div class="item-tips error" id="tips_content">请简单介绍一下你的需求，至少5个字</div>
+    </div>
+    <div class="itemRow">
+        <div class="item-name">&nbsp;</div>
+        <div class="item-input"><input type="submit" class="submitButton" value="提交"></div>
+        <div class="item-tips"></div>
+    </div>
+    </form>
+</div>
+<form id="uploadForm" method="post" enctype="multipart/form-data" action="/?m=common&a=uploadimage">
+<input name="filedata" id="filedata" type="file" style="opacity:0; visibility:visible; position:absolute; z-index:200;">
+</form>
+<script type="text/javascript">
+$.ajax({
+	url:'/?m=common&c=district&a=showoptions&fid=0&selected=$task[province]',
+	success: function(option){
+		var optionlist = '<option value="0">选择省份</option>'+option;
+		$("#select_province").html(optionlist);
+		if(parseInt($("#select_province").val())>0){
+			loadCity($("#select_province").val(),'{$task[city]}');
+		}
+	}
+});
+
+function loadCity(province,selected){
+	$.ajax({
+		url:'/?m=common&c=district&a=showoptions&fid='+province+'&selected='+selected,
+		success: function(option){
+			var optionlist = '<option value="0">选择城市</option>'+option;
+			$("#select_city").html(optionlist);
+		}
+	});
+}
+$("#select_province").change(function(){
+	var province = $(this).find(":selected").text();
+	if(parseInt($(this).val()) > 0){
+		$("#task_province").val(province);
+		loadCity($(this).val(),'$task[city]');
+	}else {
+		$("#select_city").html('<option value="0">选择城市</option>');
+	}
+});
+$("#select_city").change(function(){
+	var city = $(this).find(":selected").text();
+	if(parseInt($(this).val()) > 0){
+		$("#task_city").val(city);
+	}
+});
+$("#selectFileButton").mouseover(function(){
+	$("#filedata").css({'left':$(this).offset().left,'top':$(this).offset().top,
+	'width':$(this).width(),'height':$(this).height()});
+});
+$("#filedata").change(function(){
+	$("#uploadForm").ajaxSubmit({
+		dataType:'json',
+		success:function(json){
+			if(json.errno == 0){
+				var del = $('<a class="delete icon" href="javascript:;" title="删除">&#xf00b3;</a>').bind('click',function(){
+					$(this).parent().remove();
+				});
+				var imageItem = $('<div class="imageUploadItem"><img src="'+json.data.url+'" />'+
+				'<input type="hidden" name="pic[]" value="'+json.data.attachment+'"></div>').append(del);
+				$("#imageUploadQueue").append(imageItem);
+			}else {
+				alert('上传失败('+json.error+')');
+			}
+		}
+	});
+});
+$("#taskForm").submit(function(){
+	if(($("#task_title").val()).length < 2){
+		$("#tips_title").show();
+		return false;
+	}else {
+		$("#tips_title").hide();
+	}
+	if(!$("#task_contact").val()){
+		$("#tips_content").show();
+		return false;
+	}else {
+		$("#tips_content").hide();
+	}
+	if(!$("#task_category").val()){
+		$("#tips_category").show();
+		return false;
+	}else {
+		$("#tips_category").hide();
+	}
+	if(!$("#task_province").val() || !$("#task_city").val()){
+		$("#tips_district").show();
+		return false;
+	}else {
+		$("#tips_district").hide();
+	}
+	if(($("#task_content").val()).length < 10){
+		$("#tips_content").show();
+		return false;
+	}else {
+		$("#tips_content").hide();
+	}
+	return true;
+});
+</script>
+{template footer_home}
