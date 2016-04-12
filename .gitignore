@@ -1,3 +1,6 @@
 .*
 !.gitignore
 Config
+data/cache
+data/template
+data/sesstion
