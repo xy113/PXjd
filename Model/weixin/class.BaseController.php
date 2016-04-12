@@ -40,8 +40,8 @@ class BaseController extends Controller{
 				$this->subject_types[$type['typeid']] = $type['typename'];
 			}
 		}
-		$questionlist = cache('exam_question');
-		$this->paper_config = $questionlist[$this->exam_setting['questionid']];
+		$paperlist = cache('exam_paper');
+		$this->paper_config = $paperlist[$this->exam_setting['paperid']];
 		
 		if ($this->paper_config['subject_set']){
 			foreach ($this->paper_config['subject_set'] as $type){

@@ -21,7 +21,8 @@ abstract class Controller{
 	}
 	
 	public function t($tableName) {
-		return M($tableName);
+		$model = new Model();
+		return $model->db->t($tableName);
 	}
 	
 	public function m($tableName) {

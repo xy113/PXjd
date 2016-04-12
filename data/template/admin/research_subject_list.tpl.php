@@ -19,17 +19,24 @@
 <thead>
   <tr>
     <th width="30"><input type="checkbox" class="checkbox" onclick="DSXCMS.checkAll(this,'delete[]')"></th>
-    <th width="400">题目</th>
-    <th>选项</th>
-    <th width="40">编辑</th>
+    <th width="400">题目标题</th>
+    <th>查看选项记录</th>
+    <th width="120">选项</th>
   </tr>
  </thead>
  <tbody>
-  <?php if(is_array($subjectlist)) { foreach($subjectlist as $id => $list) { ?>  <?php $list['dateline']=@date('Y-m-d H:i',$list['dateline']) ?>  <?php $list['options']=$this->_getOptionString($list['options']); ?>  <tr>
+  <?php if(is_array($subjectlist)) { foreach($subjectlist as $id => $list) { ?>  <?php $list['dateline']=@date('Y-m-d H:i',$list['dateline']) ?>  <tr>
     <td><input type="checkbox" class="checkbox" name="delete[]" value="<?php echo $id;?>"></td>
-    <th><?php echo $list['subject'];?></th>
-    <td><?php echo $list['options'];?></td>
-    <td><a href="/?m=admin&c=research&a=editsubject&paperid=<?php echo $paperid;?>&id=<?php echo $id;?>">编辑</a></td>
+    <th><a href="javascript:;" onclick="viewResult(<?php echo $list['id'];?>);"><?php echo $list['subject'];?></a></th>
+    <td>
+    	<ul>
+        <?php if(is_array($list['options'])) { foreach($list['options'] as $option) { ?>           <li><a href="javascript:;" onclick="viewOption(<?php echo $list['id'];?>,'<?php echo $option['optionkey'];?>');"><?php echo $option['optionkey'];?>、<?php echo $option['optionname'];?></a></li>
+           <?php } } ?>        </ul>
+    </td>
+    <td>
+    	<a href="/?m=admin&c=research&a=editsubject&paperid=<?php echo $paperid;?>&id=<?php echo $id;?>">编辑</a>&nbsp;&nbsp;
+       <a href="javascript:;" onclick="viewResult(<?php echo $list['id'];?>);">查看结果</a>
+    </td>
   </tr>
   <?php } } ?>  </tbody>
   <tfoot>
@@ -42,4 +49,18 @@
   </tr>
  </tfoot>
 </table>
-</form><?php include template('footer'); ?>
+</form>
+<script type="text/javascript">
+function viewResult(subjectid){
+	$.ajax({
+		url:'/?m=<?php echo $G['m'];?>&c=<?php echo $G['c'];?>&a=viewsubject&paperid=<?php echo $paperid;?>&subjectid='+subjectid,
+		success: function(c){
+			var dlg = dialog(c,{showFooter:false,width:830,title:'调查结果'});
+		}
+	});
+}
+function viewOption(subjectid,optionvalue){
+	var url = '/?m=<?php echo $G['m'];?>&c=<?php echo $G['c'];?>&a=viewoption&subjectid='+subjectid+'&answer='+optionvalue;
+	var dlg = dialog('<iframe width="100%" height="450" border="0" frameborder="0" src="'+url+'"></iframe>',{showFooter:false,width:830,height:600,title:'调查结果'});
+}
+</script><?php include template('footer'); ?>

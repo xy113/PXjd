@@ -2,20 +2,22 @@
 <h2>
 <span class="right">
 	<form name="search" action="/?">
-        <input type="hidden" name="m" value="admin">
-        <input type="hidden" name="c" value="exam">
-        <input type="hidden" name="a" value="record">
-        <select name="paperid" id="paperid">
-        	<option value="0">全部</option>
-        	{loop $paperlist $list}
-           <option value="$list[paperid]"{if $paperid==$list[paperid]} selected{/if}>$list[name]</option>
-           {/loop}
+        <input type="hidden" name="m" value="$G[m]">
+        <input type="hidden" name="c" value="$G[c]">
+        <input type="hidden" name="a" value="$G[a]">
+        <input type="hidden" name="paperid" value="$paperid">
+        <select name="field" id="field">
+        	<option value="">不限</option>
+        	<option value="uid"{if $field=='uid'} selected{/if}>UID</option>
+           <option value="username"{if $field=='username'} selected{/if}>姓名</option>
+           <option value="idnumber"{if $field=='idnumber'} selected{/if}>身份号</option>
         </select>
-        <!--<input type="text" class="text text200" name="kw" value="$kw">-->
+        <input type="text" class="text text200" name="kw" value="$kw">
         <input type="submit" class="button search" value="$lang[search]">
     </form>
 </span>
 答题记录
+<a class="addnew" href="/?m=$G[m]&c=$G[c]&a=paper">试卷列表</a>
 </h2>
 <form name="articles" id="articles" method="post">
 <input type="hidden" name="formsubmit" value="yes" />
@@ -36,15 +38,14 @@
  </thead>
  <tbody>
   <!--{loop $recordlist $list}-->
-  {eval $examinee=$examineelist[$list[uid]];}
   {eval $list[spenttime]=$this->_formatTime($list[submittime]-$list[starttime]);}
   {eval $list[starttime]=@date('Y-m-d H:i',$list[starttime]);}
   <tr>
     <td><input type="checkbox" class="checkbox" name="delete[]" value="$list[recordid]"></td>
-    <th><a href="/?m=exam&c=paper&a=viewpaper&uid=$list[uid]&recordid=$list[recordid]" target="_blank">$examinee[username]</a></th>
-    <td>$examinee[idnumber]</td>
-    <td>$examinee[town]</td>
-    <td>$examinee[company]</td>
+    <th><a href="/?m=exam&c=paper&a=viewpaper&uid=$list[uid]&recordid=$list[recordid]" target="_blank">$list[username]</a></th>
+    <td>$list[idnumber]</td>
+    <td>$list[town]</td>
+    <td>$list[company]</td>
     <td>$list[starttime]</td>
     <td><center>{if $list[submited]}是{else}否{/if}</center></td>
     <td>$list[spenttime]</td>
@@ -58,7 +59,7 @@
           <span class="pagebox">$pages</span>
           <input type="submit" class="button" value="删除">　 
           <input type="button" class="button" value="$lang[refresh]" onclick="window.location.reload()">　 
-          {if $questionid}<a href="javascript:;" class="button" onclick="window.open('/?m=$G[m]&c=$G[c]&a=exportresult&questionid=$questionid&page=$G[page]');">导出EXCEL表格</a>{/if}
+          <a class="button" href="/?m=$G[m]&c=$G[c]&a=exportresult&paperid=$paperid">导出EXCEL表格</a>
       </td>
   </tr>
  </tfoot>
@@ -67,7 +68,7 @@
 <script type="text/javascript">
 function toggleSort(field,asc){
 	var asort = asc == 'ASC' ? 'DESC' : 'ASC';
-	window.location.href = '/?m=$G[m]&c=$G[c]&a=$G[a]&orderby='+field+'&asc='+asort;
+	window.location.href = '/?m=$G[m]&c=$G[c]&a=$G[a]&paperid=$paperid&orderby='+field+'&asc='+asort;
 }
 </script>
 {template footer}

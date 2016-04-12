@@ -161,14 +161,49 @@ class Excel_XML
 
         // print out document to the browser
         // need to use stripslashes for the damn ">"
-        echo stripslashes (sprintf($this->header, $this->sEncoding));
-        echo "\n<Worksheet ss:Name=\"" . $this->sWorksheetTitle . "\">\n<Table>\n";
-            foreach ($this->lines as $line)
-            echo $line;
-
-            echo "</Table>\n</Worksheet>\n";
-        echo $this->footer;
+        echo $this->getXML();
     }
-
+    
+    public function saveXML($filename){
+    	if ($handle = @fopen($filename, 'w')){
+    		$xml = $this->getXML();
+    		@fwrite($handle, $xml);
+    		@fclose($handle);
+    	}
+    }
+    
+    public function getHeader(){
+    	$header = stripslashes (sprintf($this->header, $this->sEncoding));
+    	$header.= "\n<Worksheet ss:Name=\"" . $this->sWorksheetTitle . "\">\n<Table>\n";
+    	return $header;
+    }
+    
+    public function getFooter(){
+    	return "</Table>\n</Worksheet>\n".$this->footer;
+    }
+    
+    public function getRow($array){
+    	$cells = "";
+    	foreach ($array as $k => $v){
+	    	$type = 'String';
+	    	if ($this->bConvertTypes === true && is_numeric($v)){
+	    		$type = 'Number';
+	    	}
+	    	$v = htmlentities($v, ENT_COMPAT, $this->sEncoding);
+	    	$cells .= "<Cell><Data ss:Type=\"$type\">" . $v . "</Data></Cell>\n";
+    	}
+    	return "<Row>\n" . $cells . "</Row>\n";
+    }
+	
+    public function getXML(){
+    	$xml = stripslashes (sprintf($this->header, $this->sEncoding));
+    	$xml.= "\n<Worksheet ss:Name=\"" . $this->sWorksheetTitle . "\">\n<Table>\n";
+    	foreach ($this->lines as $line){
+    		$xml.= $line;
+    	}
+    	$xml.= "</Table>\n</Worksheet>\n".$this->footer;
+    	return $xml;
+    }
+   
 }
 class phpExcel extends Excel_XML{}

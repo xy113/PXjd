@@ -25,4 +25,6 @@ class UploadImage extends Upload{
 			return false;
 		}
 	}
+	
+	
 }

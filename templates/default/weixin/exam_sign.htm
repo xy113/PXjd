@@ -4,9 +4,6 @@
     <input type="hidden" name="formsubmit" value="yes">
     <input type="hidden" name="formhash" value="{FORMHASH}">
     <input type="hidden" name="examineeid" value="$examinee[uid]">
-    <input type="hidden" name="newexaminee[province]" value="贵州">
-    <input type="hidden" name="newexaminee[city]" value="六盘水">
-    <input type="hidden" name="newexaminee[county]" value="盘县">
     {if $examinee[uid]}
     <div class="rowItem">
     	<h3>姓名:</h3>
@@ -37,13 +34,28 @@
        <div class="inputdiv"><input type="text" class="input-text" name="newexaminee[weixin]" value="$examinee[weixin]"></div>
    </div>
    <div class="rowItem">
-       <h3>所在乡镇:</h3>
+       <h3>所在地:</h3>
        <div class="inputdiv">
-       		<select class="select" name="newexaminee[town]">
-       		{loop $townlist $list}
-            <option value="$list[name]"{if $list[name]==$examinee[town]} selected{/if}>$list[name]</option>
-           {/loop}
-           </select>
+       		<p>
+       		<select class="select dist" id="province" name="newexaminee[province]">
+            <option value="">请选择</option>
+          </select>
+          </p>
+          <p>
+          <select class="select dist" id="city" name="newexaminee[city]">
+              <option value="">请选择</option>
+          </select>
+          </p>
+          <p>
+          <select class="select dist" id="county" name="newexaminee[county]">
+              <option value="">请选择</option>
+          </select>
+          </p>
+          <p>
+          <select class="select dist" id="town" name="newexaminee[town]">
+              <option value="">请选择</option>
+          </select>
+          </p>
        </div>
    </div>
    <div class="rowItem">
@@ -54,6 +66,25 @@
     </form>
 </div>
 <script type="text/javascript">
+DSXCMS.showDistrict(0,'#province','$examinee[province]','请选择省份');
+$("#province").change(function(){
+	var fid = $(this).find("option:selected").attr('idvalue');
+	//if(!fid) return;
+	DSXCMS.showDistrict(fid,'#city','$examinee[city]','请选择城市');
+});
+
+$("#city").change(function(){
+	var fid = $(this).find("option:selected").attr('idvalue');
+	//if(!fid) return;
+	DSXCMS.showDistrict(fid,'#county','$examinee[county]','请选择区县州');
+});
+
+$("#county").change(function(){
+	var fid = $(this).find("option:selected").attr('idvalue');
+	//if(!fid) return;
+	DSXCMS.showDistrict(fid,'#town','$examinee[town]','请选择乡镇');
+});
+
 $("#examineeForm").submit(function(){
 	{if !$examinee[uid]}
 	if(!isUsername($("#username").val())){

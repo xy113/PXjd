@@ -1,18 +1,22 @@
 <?php if (!defined('IN_DSXCMS')) die('Access Denied!');?><?php include template('header'); ?><h2>
 <span class="right">
 	<form name="search" action="/?">
-        <input type="hidden" name="m" value="admin">
-        <input type="hidden" name="c" value="exam">
-        <input type="hidden" name="a" value="record">
-        <select name="paperid" id="paperid">
-        	<option value="0">全部</option>
-        <?php if(is_array($paperlist)) { foreach($paperlist as $list) { ?>           <option value="<?php echo $list['paperid'];?>"<?php if($paperid==$list['paperid']) { ?> selected<?php } ?>><?php echo $list['name'];?></option>
-           <?php } } ?>        </select>
-        <!--<input type="text" class="text text200" name="kw" value="<?php echo $kw;?>">-->
+        <input type="hidden" name="m" value="<?php echo $G['m'];?>">
+        <input type="hidden" name="c" value="<?php echo $G['c'];?>">
+        <input type="hidden" name="a" value="<?php echo $G['a'];?>">
+        <input type="hidden" name="paperid" value="<?php echo $paperid;?>">
+        <select name="field" id="field">
+        	<option value="">不限</option>
+        	<option value="uid"<?php if($field=='uid') { ?> selected<?php } ?>>UID</option>
+           <option value="username"<?php if($field=='username') { ?> selected<?php } ?>>姓名</option>
+           <option value="idnumber"<?php if($field=='idnumber') { ?> selected<?php } ?>>身份号</option>
+        </select>
+        <input type="text" class="text text200" name="kw" value="<?php echo $kw;?>">
         <input type="submit" class="button search" value="<?php echo $lang['search'];?>">
     </form>
 </span>
 答题记录
+<a class="addnew" href="/?m=<?php echo $G['m'];?>&c=<?php echo $G['c'];?>&a=paper">试卷列表</a>
 </h2>
 <form name="articles" id="articles" method="post">
 <input type="hidden" name="formsubmit" value="yes" />
@@ -32,12 +36,12 @@
   </tr>
  </thead>
  <tbody>
-  <?php if(is_array($recordlist)) { foreach($recordlist as $list) { ?>  <?php $examinee=$examineelist[$list['uid']]; ?>  <?php $list['spenttime']=$this->_formatTime($list['submittime']-$list['starttime']); ?>  <?php $list['starttime']=@date('Y-m-d H:i',$list['starttime']); ?>  <tr>
+  <?php if(is_array($recordlist)) { foreach($recordlist as $list) { ?>  <?php $list['spenttime']=$this->_formatTime($list['submittime']-$list['starttime']); ?>  <?php $list['starttime']=@date('Y-m-d H:i',$list['starttime']); ?>  <tr>
     <td><input type="checkbox" class="checkbox" name="delete[]" value="<?php echo $list['recordid'];?>"></td>
-    <th><a href="/?m=exam&c=paper&a=viewpaper&uid=<?php echo $list['uid'];?>&recordid=<?php echo $list['recordid'];?>" target="_blank"><?php echo $examinee['username'];?></a></th>
-    <td><?php echo $examinee['idnumber'];?></td>
-    <td><?php echo $examinee['town'];?></td>
-    <td><?php echo $examinee['company'];?></td>
+    <th><a href="/?m=exam&c=paper&a=viewpaper&uid=<?php echo $list['uid'];?>&recordid=<?php echo $list['recordid'];?>" target="_blank"><?php echo $list['username'];?></a></th>
+    <td><?php echo $list['idnumber'];?></td>
+    <td><?php echo $list['town'];?></td>
+    <td><?php echo $list['company'];?></td>
     <td><?php echo $list['starttime'];?></td>
     <td><center><?php if($list['submited']) { ?>是<?php } else { ?>否<?php } ?></center></td>
     <td><?php echo $list['spenttime'];?></td>
@@ -50,7 +54,7 @@
           <span class="pagebox"><?php echo $pages;?></span>
           <input type="submit" class="button" value="删除">　 
           <input type="button" class="button" value="<?php echo $lang['refresh'];?>" onclick="window.location.reload()">　 
-          <?php if($questionid) { ?><a href="javascript:;" class="button" onclick="window.open('/?m=<?php echo $G['m'];?>&c=<?php echo $G['c'];?>&a=exportresult&questionid=<?php echo $questionid;?>&page=<?php echo $G['page'];?>');">导出EXCEL表格</a><?php } ?>
+          <a class="button" href="/?m=<?php echo $G['m'];?>&c=<?php echo $G['c'];?>&a=exportresult&paperid=<?php echo $paperid;?>">导出EXCEL表格</a>
       </td>
   </tr>
  </tfoot>
@@ -59,6 +63,6 @@
 <script type="text/javascript">
 function toggleSort(field,asc){
 	var asort = asc == 'ASC' ? 'DESC' : 'ASC';
-	window.location.href = '/?m=<?php echo $G['m'];?>&c=<?php echo $G['c'];?>&a=<?php echo $G['a'];?>&orderby='+field+'&asc='+asort;
+	window.location.href = '/?m=<?php echo $G['m'];?>&c=<?php echo $G['c'];?>&a=<?php echo $G['a'];?>&paperid=<?php echo $paperid;?>&orderby='+field+'&asc='+asort;
 }
 </script><?php include template('footer'); ?>

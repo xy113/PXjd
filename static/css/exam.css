@@ -1,5 +1,5 @@
 /* CSS Document */
-.exam-home{margin:100px auto; width:500px;}
+.exam-home{margin:100px auto 0px; width:500px;}
 .exam-home h1{font-family:"Hiragino Sans GB"; text-align:center; font-size:32px;}
 .exam-home .nowtime,.exam-home .tips{text-align:center; margin:20px 0; height:20px; font-size:16px;}
 .exam-home .buttondiv{clear:both; margin-top:50px; text-align:center;}

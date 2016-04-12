@@ -120,7 +120,7 @@ class ExampaperController extends BaseController{
 		$examset   = $this->exam_setting;
 		$paperconf = $this->paper_config;
 		$expire    = intval($paperconf['timelength']) * 60;
-		$record = $this->t('exam_record')->where(array('uid'=>$this->uid,'submited'=>0))->order('recordid','DESC')->selectOne();
+		$record = $this->t('exam_record')->where(array('uid'=>$this->uid,'submited'=>0, 'paperid'=>$examset['paperid']))->order('recordid','DESC')->selectOne();
 		if ($record && ((time() - $record['starttime']) < $expire)){
 			return $record;
 		}else {
@@ -146,7 +146,7 @@ class ExampaperController extends BaseController{
 					'endtime'=>time() + $expire,
 					'submited'=>0,
 					'subjects'=>$subjects,
-					'questionid'=>$examset['questionid']
+					'paperid'=>$examset['paperid']
 			);
 			$this->t('exam_record')->insert($data);
 			return $this->_getRecord();
@@ -154,8 +154,8 @@ class ExampaperController extends BaseController{
 	}
 	
 	private function _createSubjects($typeid,$num,$type=1){
-		$orderby = $type == 1 ? 'RAND()' : 'questionid';
-		$subjectlist = $this->t('exam_subject')->where(array('typeid'=>$typeid,'questionid'=>$this->exam_setting['questionid']))
+		$orderby = $type == 1 ? 'RAND()' : 'id';
+		$subjectlist = $this->t('exam_subject')->where(array('typeid'=>$typeid,'paperid'=>$this->exam_setting['paperid']))
 		->order($orderby,'ASC')->limit(0,$num)->select();
 		if ($subjectlist){
 			/*
@@ -244,7 +244,7 @@ class ExampaperController extends BaseController{
 	 */
 	private function checkRecord(){
 		$paperset = $this->paper_config;
-		$record = $this->t('exam_record')->where(array('uid'=>$this->uid,'questionid'=>$paperset['questionid']))->selectOne();
+		$record = $this->t('exam_record')->where(array('uid'=>$this->uid,'paperid'=>$paperset['paperid']))->selectOne();
 		if ($record){
 			$timelast = $paperset['timelength']*60 - (time() - $record['starttime']);
 			if (($timelast < 0) || $record['submited']){

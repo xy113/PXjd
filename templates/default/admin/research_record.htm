@@ -1,5 +1,7 @@
 {template header}
-<h2>问卷调查记录</h2>
+<h2>问卷调查记录
+<a class="addnew" href="/?m=$G[m]&c=$G[c]&a=paper">返回问卷列表</a>
+</h2>
 <form method="post">
 <input type="hidden" name="formsubmit" value="yes" />
 <input type="hidden" name="formhash" value="{FORMHASH}">
@@ -8,7 +10,11 @@
   <tr>
     <th width="30"><input type="checkbox" class="checkbox" onclick="DSXCMS.checkAll(this,'delete[]')"></th>
     <th style="cursor:pointer;" onclick="toggleSort('$asc');" title="按时间排序">用户名</th>
-    <th width="120">参与时间</th>
+    <th>省</th>
+    <th>市</th>
+    <th>县</th>
+    <th>乡</th>
+    <th width="120">答题时间</th>
   </tr>
  </thead>
  <tbody>
@@ -17,6 +23,10 @@
   <tr>
     <td><input type="checkbox" class="checkbox" name="delete[]" value="$list[recordid]"></td>
     <th>{if $list[username]}<a href="/?m=space&uid=$list[uid]" target="_blank">$list[username]</a>{else}游客{/if}</th>
+    <td>{$userlist[$list[uid]][province]}</td>
+    <td>{$userlist[$list[uid]][city]}</td>
+    <td>{$userlist[$list[uid]][county]}</td>
+    <td>{$userlist[$list[uid]][town]}</td>
     <td>$time</td>
   </tr>
   <!--{/loop}-->

@@ -81,8 +81,8 @@ class Model{
 		return $this->db->having($having);
 	}
 	
-	public function join($join,$type='LEFT'){
-		return $this->db->join($join,$type);
+	public function join($table,$type='LEFT', $on=''){
+		return $this->db->join($table, $type, $on);
 	}
 	public function union($table,$all=FALSE){
 		return $this->db->union($table,$all);

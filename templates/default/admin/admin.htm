@@ -86,7 +86,6 @@
           <li><a rel="item" href="/?m=admin&c=exam&a=setting" target="main">参数设置</a></li>
           <li><a rel="item" href="/?m=admin&c=exam&a=paper" target="main">试卷设置</a></li>
           <li><a rel="item" href="/?m=admin&c=exam&a=examinee" target="main">考生列表</a></li>
-          <li><a rel="item" href="/?m=admin&c=exam&a=record" target="main">答题记录</a></li>
           <li><a rel="item" href="/?m=admin&c=research&a=paper" target="main">调查问卷</a></li>
       </ul>
       <h3><a href="javascript:;"><i class="icon">&#xf01ba;</i>页面管理</a></h3>

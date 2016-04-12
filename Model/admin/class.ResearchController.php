@@ -203,6 +203,28 @@ class ResearchController extends BaseController{
 			$pagecount  = $totalnum < $pagesize ? 1 : ceil($totalnum/$pagesize);
 			$asc = (isset($_GET['asc']) && strtoupper($_GET['asc']) == 'DESC')  ? 'DESC' : 'ASC';
 			$recordlist = $this->t('research_record')->where($where)->order('recordid',$asc)->page($G['page'],$pagesize)->select();
+			if ($recordlist){
+				
+				$uids = $comma = '';
+				foreach ($recordlist as $list){
+					$uids.= $comma.$list['uid'];
+					$comma = ',';
+				}
+				
+				if ($uids){
+					$userlist = $this->t('member_profile')->where("uid IN($uids)")->select();
+					if ($userlist){
+						$newlist = array();
+						foreach ($userlist as $list){
+							$newlist[$list['uid']] = $list;
+						}
+						$userlist = $newlist;
+						unset($newlist);
+					}
+				}
+			}else {
+				$recordlist = array();
+			}
 			$pages = $this->showPages($G['page'], $pagecount, $totalnum, "paperid=$paperid&asc=$asc");
 			include template('research_record');
 		}
@@ -265,5 +287,43 @@ class ResearchController extends BaseController{
 		'FlashVars="ntitle=总计'.$totalnum.'人参与&toggle=全部显示|全部隐藏&vtitle=数值&cnames=&datatype=20&rtitle='.$subject['subject'].'&gtypes=pie&total='.$totalnum.'&xdata='.$flashvars[xdata].'" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer"></embed>';
 		echo $flash;
 		exit();
+	}
+	
+	public function viewoption(){
+		global $G,$lang;
+		$subjectid = intval($_GET['subjectid']);
+		$answer = trim($_GET['answer']);
+		$where = "subjectid='$subjectid' AND (answer='$answer' OR answer LIKE '%\"$answer\"%')";
+		$totalnum = $this->t('research_answer')->where($where)->count();
+		$pagecount = $totalnum < 20 ? 1 : ceil($totalnum/20);
+		$answerlist = $this->t('research_answer')->where($where)->page($G['page'], 20)->select();
+		if ($answerlist){
+			$uids = $comma = '';
+			foreach ($answerlist as $list){
+				$uids.= $comma.$list['uid'];
+				$comma = ',';
+			}
+			if ($uids){
+				$userlist = $this->t('member_profile')->where("uid IN($uids)")->select();
+				if ($userlist){
+					$newlist = array();
+					foreach ($userlist as $list){
+						$newlist[$list['uid']] = $list;
+					}
+					$userlist = $newlist;
+					unset($newlist);
+				}
+				$namelist = $this->t('member')->field('uid,username')->where("uid IN($uids)")->select();
+				if ($namelist){
+					foreach ($namelist as $list){
+						$userlist[$list['uid']]['username'] = $list['username'];
+					}
+				}
+			}
+		}else {
+			$answerlist = array();
+		}
+		$pages = $this->showPages($G['page'], $pagecount, $totalnum, "subjectid=$subjectid&answer=$answer");
+		include template('research_option_record');
 	}
 }

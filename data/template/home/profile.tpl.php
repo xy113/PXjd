@@ -73,6 +73,9 @@
           <select class="input-select dist" id="county" name="profilenew[county]">
               <option value="">请选择</option>
           </select>
+          <select class="input-select dist" id="town" name="profilenew[town]">
+              <option value="">请选择</option>
+          </select>
         </div>
         <!--<div class="item-tips">你当前所工作或生活的地方</div>-->
     </div>
@@ -88,23 +91,24 @@
     </form>
 </div>
 <script type="text/javascript">
-function loadDistrict(o,fid,selected){
-	if(!fid) return;
-	var optionhtml = '<option value="">请选择</option>';
-	$.ajax({
-		url:'/?m=common&c=district&op=fetchdistrict&fid='+fid,
-		dataType:'json',
-		success: function(json){
-			for(var k in json){
-				var optionitem = json[k];
-				optionhtml+= '<option idvalue="'+optionitem.id+'" value="'+
-				optionitem.name+'"'+((optionitem.name == selected) ? '  selected="selected"' : '')+'>'+optionitem.name+'</option>';
-				
-			}
-			$(o).html(optionhtml).show();
-		}
-	});
-}
+DSXCMS.showDistrict(0,'#province','<?php echo $profile['province'];?>','请选择省份');
+$("#province").change(function(){
+	var fid = $(this).find("option:selected").attr('idvalue');
+	//if(!fid) return;
+	DSXCMS.showDistrict(fid,'#city','<?php echo $profile['city'];?>','请选择城市');
+});
+
+$("#city").change(function(){
+	var fid = $(this).find("option:selected").attr('idvalue');
+	//if(!fid) return;
+	DSXCMS.showDistrict(fid,'#county','<?php echo $profile['county'];?>','请选择区县州');
+});
+
+$("#county").change(function(){
+	var fid = $(this).find("option:selected").attr('idvalue');
+	//if(!fid) return;
+	DSXCMS.showDistrict(fid,'#town','<?php echo $profile['town'];?>','请选择乡镇');
+});
 
 ;(function(){
 	$("#form").submit(function(){

@@ -10,7 +10,7 @@
     <th width="80">时间限制</th>
     <th width="300">考试说明</th>
     <th width="80">出题方式</th>
-    <th width="120">选项</th>
+    <th width="180">选项</th>
   </tr>
  </thead>
  <tbody>
@@ -21,8 +21,9 @@
     <td><?php echo $list['tips'];?></td>
     <td><?php if($list['make_type']==1) { ?>随机出题<?php } else { ?>统一出题<?php } ?></td>
     <td>
-       <a href="/?m=admin&c=exam&a=editpaper&paperid=<?php echo $list['paperid'];?>">编辑试卷</a>  
-       <a href="/?m=admin&c=exam&a=subject&paperid=<?php echo $list['paperid'];?>">试题管理</a>
+       <a href="/?m=admin&c=exam&a=editpaper&paperid=<?php echo $list['paperid'];?>">编辑试卷</a> &nbsp; 
+       <a href="/?m=admin&c=exam&a=subject&paperid=<?php echo $list['paperid'];?>">试题管理</a> &nbsp;
+       <a href="/?m=admin&c=exam&a=record&paperid=<?php echo $list['paperid'];?>">答题记录</a>
     </td>
   </tr>
   <?php } } ?>  </tbody>

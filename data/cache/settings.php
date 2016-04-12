@@ -1,7 +1,7 @@
 <?php
 //Cache file, DO NOT modify me!
-//Created: Apr 11, 2016, 9:18
-//Identify: 1490ddc5cef9ae2f6ad6019ae30f33ca
+//Created: Apr 12, 2016, 14:14
+//Identify: 609484d44f6811d232267e4de9fce949
 return array (
   'sitename' => '盘县禁毒委员会',
   'siteurl' => 'http://www.pxjd.org',
@@ -36,9 +36,6 @@ return array (
   'cachetime' => '900',
   'cachedir' => 'data/cache',
   'gzipcompress' => '1',
-  'statcode' => '<script type="text/javascript">
-var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
-document.write(unescape("%3Cscript src=\'" + _bdhmProtocol + "hm.baidu.com/h.js%3F52cba3b8da836839bc801a56ad16f015\' type=\'text/javascript\'%3E%3C/script%3E"));
-</script>',
+  'statcode' => '<script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id=\'cnzz_stat_icon_1253998229\'%3E%3C/span%3E%3Cscript src=\'" + cnzz_protocol + "s11.cnzz.com/stat.php%3Fid%3D1253998229\' type=\'text/javascript\'%3E%3C/script%3E"));</script>',
   'description' => '盘县禁毒办官方网站',
 );

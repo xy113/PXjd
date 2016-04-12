@@ -3,7 +3,6 @@ namespace Weixin;
 class ResearchController extends BaseController{
 	private $paper = array();
 	
-	
 	public function index(){
 		if ($this->checkFormSubmit()){
 			$paperid = $_GET['paperid'];
@@ -35,13 +34,17 @@ class ResearchController extends BaseController{
 		}else {
 			global $G,$lang;
 			$this->paper = $this->getPaper();
+			$paper = $this->paper;
 			$paperid = $this->paper['paperid'];
 			$where = array('paperid'=>$this->paper['paperid']);
 			$subjectlist = $this->t('research_subject')->where($where)->order('id','ASC')->select();
 			if ($subjectlist){
+				$orderno = 0;
 				$newlist = array();
 				$idlist = $comma = '';
 				foreach ($subjectlist as $list){
+					$orderno++;
+					$list['orderno'] = $orderno;
 					$newlist[$list['id']] = $list;
 					$idlist.= $comma.$list['id'];
 					$comma = ',';
@@ -59,7 +62,8 @@ class ResearchController extends BaseController{
 			}else {
 				$subjectlist = array();
 			}
-			//print_array($optionlist);
+			//print_array($paper);
+			//print_array($subjectlist);
 			include template('research_paper');
 		}
 	}

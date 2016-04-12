@@ -19,7 +19,7 @@ class ExamController extends BaseController{
 	public function viewrecord(){
 		global $G,$lang;
 		$recordlist = $this->t('exam_record')->where(array('uid'=>$this->uid))->select();
-		$questionlist = cache('exam_question');
+		$paperlist = cache('exam_paper');
 		$G['title'] = '成绩查询';
 		include template('exam_record');
 	}
@@ -29,6 +29,14 @@ class ExamController extends BaseController{
 			$newexaminee = $_GET['newexaminee'];
 			if ($newexaminee['username'] && $newexaminee['idnumber'] && $newexaminee['tel']){
 				$examineeid = $_GET['examineeid'];
+				$profile = array(
+						'realname'=>$newexaminee['username'],
+						'province'=>$newexaminee['province'],
+						'city'=>$newexaminee['city'],
+						'county'=>$newexaminee['county'],
+						'town'=>$newexaminee['town']
+				);
+				member_update_profile($this->uid, $profile);
 				if ($examineeid){
 					$this->t('exam_examinee')->where(array('uid'=>$this->uid))->update($newexaminee);
 					$this->showSuccess('modi_succeed');
@@ -45,8 +53,14 @@ class ExamController extends BaseController{
 				$G['title'] = '信息修改';
 			}else {
 				$G['title'] = '信息登记';
+				$examinee = array(
+						'username'=>$profile['realname'],
+						'province'=>$profile['province'],
+						'city'=>$profile['city'],
+						'county'=>$profile['county'],
+						'town'=>$profile['town']
+				);
 			}
-			$townlist = $this->t('district')->where(array('fid'=>4402))->select();
 			include template('exam_sign');
 		}
 	}

@@ -71,18 +71,23 @@ function C($name,$value=null){
  * @param string $name
  */
 function M($name){
-	$modelclass = ucfirst($name).'Model';
-	if (is_file(APP_PATH.$name.'/class.'.$modelclass.'.php')){
-		$class = $name.'\\'.$modelclass;
+	if (is_array($name)){
+		$model = new \Core\Model();
+		return $model->db->t($name);
 	}else {
-		if (is_file(APP_PATH.$name.'/Model/class.'.$modelclass.'.php')){
-			$class = $name.'\\Model\\'.$modelclass;
+		$modelclass = ucfirst($name).'Model';
+		if (is_file(APP_PATH.$name.'/class.'.$modelclass.'.php')){
+			$class = $name.'\\'.$modelclass;
 		}else {
-			$class = 'Core\\Model';
+			if (is_file(APP_PATH.$name.'/Model/class.'.$modelclass.'.php')){
+				$class = $name.'\\Model\\'.$modelclass;
+			}else {
+				$class = 'Core\\Model';
+			}
 		}
+		$model = new $class($name);
+		return $model;
 	}
-	$model = new $class($name);
-	return $model;
 }
 
 /**

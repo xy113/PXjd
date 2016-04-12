@@ -1,0 +1,10 @@
+{template header_common}
+<div class="area">
+	<div class="yourpos">
+    	<a href="/">首页</a> {if $category[cname]}> {$category[cname]}{/if} > {$pagecontent[title]}
+    </div>
+    <div class="main">
+        <div class="page-body" style="padding:20px 0; font-size:14px; line-height:1.5;">$pagecontent[body]</div>
+    </div>
+</div>
+{template footer_common}

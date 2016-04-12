@@ -140,7 +140,26 @@ var DSXCMS = {
 		var svalue = location.search.match(new RegExp("[\?\&]" + item + "=([^\&]*)(\&?)","i"));
 		return svalue ? svalue[1] : svalue;
 	},
-	checkAll : function(o,input){return $("[name='"+input+"']").attr('checked',$(o).is(":checked"));}
+	checkAll : function(o,input){return $("[name='"+input+"']").attr('checked',$(o).is(":checked"));},
+	showDistrict:function(fid, obj, defaultval, tips){
+		if(!tips) tips = '请选择';
+		var optionhtml = '<option value="">'+tips+'</option>';
+		$.ajax({
+			url:'/?m=common&c=district&a=fetchdistrict&fid='+fid,
+			dataType:'json',
+			success: function(json){
+				if(json.errno == 0){
+					for(var k in json.data){
+						var optionitem = json.data[k];
+						optionhtml+= '<option idvalue="'+optionitem.id+'" value="'+
+						optionitem.name+'"'+((optionitem.name == defaultval) ? '  selected="selected"' : '')+'>'+optionitem.name+'</option>';
+						
+					}
+					$(obj).html(optionhtml).change();
+				}
+			}
+		});
+	}
 }
 var DSXUI = {
 	success : function(content,callback,error){
@@ -217,5 +236,6 @@ var DSXUI = {
 			});
 		}});
 		return dlg;
-	}
+	},
+	
 }

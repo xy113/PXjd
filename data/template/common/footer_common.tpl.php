@@ -2,16 +2,17 @@
 	<div class="area">
     	<div class="bottomNav">
         	
-            <a data-linkid="footer-about" rel="nofollow" href="javascript:;" target="_blank">关于我们</a><span class="split">|</span>
-            <a data-linkid="footer-contact" rel="nofollow" href="javascript:;" target="_blank">联系方式</a><span class="split">|</span>
-            <a data-linkid="footer-adhelp" rel="nofollow" href="javascript:;" target="_blank">广告服务</a><span class="split">|</span>
-            <a data-linkid="footer-gszz" rel="nofollow" href="javascript:;" target="_blank">法律援助</a><span class="split">|</span>
-            <a data-linkid="footer-join" rel="nofollow" href="javascript:;" target="_blank">加入我们</a><span class="split">|</span>
-            <a data-linkid="footer-pay" rel="nofollow" href="javascript:;" target="_blank">支付方式</a><span class="split">|</span>
-            <a data-linkid="footer-charlist" target="_blank" href="javascript:;">技术支持</a><span class="split">|</span>        
+            <a href="/?m=page&pageid=29" target="_blank">关于我们</a><span class="split">|</span>
+            <a href="/?m=page&pageid=30" target="_blank">联系方式</a><span class="split">|</span>
+            <a href="javascript:;">广告服务</a><span class="split">|</span>
+            <a href="javascript:;">法律援助</a><span class="split">|</span>
+            <a href="javascript:;">加入我们</a><span class="split">|</span>
+            <a href="http://www.songdewei.com" target="_blank">技术支持</a>     
         </div>
-        
+            
+        <p style="text-align:center; margin-top:5px;">单位地址：盘县公安局负一楼  办公电话：0858-3697297</p>
         <div class="copyright"><?php echo $G['setting']['copyright'];?>   <?php echo $G['setting']['icp'];?></div>
+        <span style="display:none;"><?php echo $G['setting']['statcode'];?></span>
     </div>
 </div>
 

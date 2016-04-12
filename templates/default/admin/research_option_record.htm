@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>后台管理中心</title>
+<link rel="stylesheet" type="text/css" href="/static/css/admincp.css">
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script type="text/javascript" src="/static/js/common.js?{TIMESTAMP}"></script>
+<script type="text/javascript" src="/static/js/jquery.dialog.js"></script>
+<script type="text/javascript" src="/static/js/jquery.form.js"></script>
+<script type="text/javascript" src="/static/js/jquery-ui-1.10.4.custom.min.js"></script>
+</head>
+
+<body>
+<form method="post">
+<input type="hidden" name="formsubmit" value="yes" />
+<input type="hidden" name="formhash" value="{FORMHASH}">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="listtable">
+<thead>
+  <tr>
+    <!--<th width="30"><input type="checkbox" class="checkbox" onclick="DSXCMS.checkAll(this,'delete[]')"></th>-->
+    <th style="cursor:pointer;" onclick="toggleSort('$asc');" title="按时间排序">用户名</th>
+    <th>省</th>
+    <th>市/州/区</th>
+    <th>县</th>
+    <th>乡镇</th>
+  </tr>
+ </thead>
+ <tbody>
+  <!--{loop $answerlist $list}-->
+  {eval $list[username]=$userlist[$list[uid]][username];}
+  <tr>
+    <!--<td><input type="checkbox" class="checkbox" name="delete[]" value="$list[answerid]"></td>-->
+    <th>{if $list[username]}<a href="/?m=space&uid=$list[uid]" target="_blank">$list[username]</a>{else}游客{/if}</th>
+    <td>{$userlist[$list[uid]][province]}</td>
+    <td>{$userlist[$list[uid]][city]}</td>
+    <td>{$userlist[$list[uid]][county]}</td>
+    <td>{$userlist[$list[uid]][town]}</td>
+  </tr>
+  <!--{/loop}-->
+  </tbody>
+  <tfoot>
+  <tr>
+      <td colspan="9">
+          <span class="pagebox">$pages</span>
+          <!--
+          <input type="submit" class="button" value="删除">　 
+          <input type="button" class="button" value="$lang[refresh]" onclick="window.location.reload()">
+          -->
+      </td>
+  </tr>
+ </tfoot>
+</table>
+</form>
+<script type="text/javascript">
+function toggleSort(asc){
+	var asort = asc == 'ASC' ? 'DESC' : 'ASC';
+	window.location.href = '/?m=$G[m]&c=$G[c]&a=$G[a]&asc='+asort;
+}
+</script>
+</body>
+</html>

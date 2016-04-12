@@ -255,12 +255,34 @@ class Mysql{
 			return $array;
 		}
 	}
-	//连贯操作
+	
+	/**
+	 * 设置当前数据表
+	 * @param string $tableName
+	 */
 	public function t($tableName){
 		foreach ($this->sql as $key=>$value){
 			$this->sql[$key] = '';
 		}
-		$this->tablename = $this->table($tableName);
+		$this->tablename = '';
+		if (is_array($tableName)){
+			foreach ($tableName as $key=>$value){
+				if (is_numeric($key)){
+					if (is_array($value)){
+						foreach ($value as $k=>$v){
+							$this->tablename.= $this->table($k).' AS '.$v.',';
+						}
+					}else {
+						$this->tablename = $this->table($value).',';
+					}
+				}else {
+					$this->tablename.= $this->table($key).' AS '.$value.',';
+				}
+			}
+			$this->tablename = trim($this->tablename, ',');
+		}else {
+			$this->tablename = $this->table($tableName);
+		}
 		return $this;
 	}
 	public function field($args = '*'){
@@ -373,7 +395,14 @@ class Mysql{
 		$this->sql['having'] = $having ? "HAVING ".$having : "";
 		return $this;
 	}
-	public function join($join,$type='LEFT'){
+	
+	/**
+	 * join 操作
+	 * @param string $table
+	 * @param string $type
+	 * @param string $on
+	 */
+	public function join($table,$type='LEFT', $on=''){
 		$joinstr = '';
 		if (func_num_args() == 1){
 			$jointype = 'LEFT JOIN';
@@ -383,13 +412,17 @@ class Mysql{
 			$jointype = $type ? $type.' JOIN' : 'JOIN';
 		}
 		
-		if (is_array($join)){
-			foreach ($join as $key=>$value){
-				$joinstr.= ' '.$jointype.' '.$value;
+		if (is_array($table)){
+			foreach ($table as $key=>$value){
+				if (!is_numeric($key)) {
+					$joinstr = ' '.$jointype.' '.$this->table($key). ' AS '.$value;
+				}
 			}
 		}else {
-			$joinstr.= ' '.$jointype.' '.$join;
+			$joinstr.= ' '.$jointype.' '.$this->table($table);
 		}
+
+		$joinstr.= $on ? ' ON '.$on : '';
 		$this->sql['join'].= $joinstr;
 		return $this;
 	}

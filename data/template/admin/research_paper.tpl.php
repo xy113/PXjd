@@ -8,7 +8,7 @@
     <th width="45"><input type="checkbox" class="checkbox" onclick="DSXCMS.checkAll(this,'delete[]')">删?</th>
     <th>问卷名称</th>
     <th>默认</th>
-    <th width="200">选项</th>
+    <th width="120">选项</th>
   </tr>
  </thead>
  <tbody id="paperlist">
@@ -17,9 +17,8 @@
     <th><input type="text" class="text" name="paperlist[<?php echo $list['paperid'];?>][papername]" value="<?php echo $list['papername'];?>"></th>
     <td><input type="radio" name="isdefault" value="<?php echo $list['paperid'];?>"<?php if($list['isdefault']) { ?> checked<?php } ?>></td>
     <td>
-       <a href="/?m=admin&c=<?php echo $G['c'];?>&a=subject&paperid=<?php echo $list['paperid'];?>">题目设置</a>&nbsp;&nbsp;  
-       <a href="/?m=admin&c=<?php echo $G['c'];?>&a=record&paperid=<?php echo $list['paperid'];?>">查看记录</a>&nbsp;&nbsp; 
-       <a href="/?m=admin&c=<?php echo $G['c'];?>&a=result&paperid=<?php echo $list['paperid'];?>">查看结果</a>
+       <a href="/?m=admin&c=<?php echo $G['c'];?>&a=subject&paperid=<?php echo $list['paperid'];?>">题目管理</a>&nbsp;&nbsp;  
+       <a href="/?m=admin&c=<?php echo $G['c'];?>&a=record&paperid=<?php echo $list['paperid'];?>">查看记录</a>
     </td>
   </tr>
   <?php } } ?>  </tbody>

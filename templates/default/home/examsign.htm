@@ -27,31 +27,24 @@
         <div class="item-input"><input type="text" class="input-text" name="newexaminee[weixin]" value="$examinee[weixin]" id="weixin"></div>
         <div class="item-tips error" id="tips_weixin">请填写你的微信号码</div>
     </div>
+    
     <div class="itemRow">
-        <div class="item-name">所在省</div>
-        <div class="item-input"><input type="text" class="input-text" name="newexaminee[province]" value="贵州" id="province" readonly></div>
-        <div class="item-tips error" id="tips_province">请选择所在省</div>
-    </div>
-    <div class="itemRow">
-        <div class="item-name">所在市</div>
-        <div class="item-input"><input type="text" class="input-text" name="newexaminee[city]" value="六盘水" id="city" readonly></div>
-        <div class="item-tips error" id="tips_city">请选择所在市</div>
-    </div>
-    <div class="itemRow">
-        <div class="item-name">所在县</div>
-        <div class="item-input"><input type="text" class="input-text" name="newexaminee[county]" value="盘县" id="county"></div>
-        <div class="item-tips error" id="tips_county">请选择所在县</div>
-    </div>
-    <div class="itemRow">
-        <div class="item-name">所在乡镇</div>
-        <div class="item-input">
-        	<select class="input-select" name="newexaminee[town]">
-            {loop $townlist $list}
-            <option value="$list[name]"{if $examinee[town]==$list[name]} selected{/if}>$list[name]</option>
-            {/loop}
-            </select>
+        <div class="item-name">所在地</div>
+        <div class="item-input" id="district" style="width:80%;">
+           <select class="input-select dist" id="province" name="newexaminee[province]">
+            <option value="">请选择</option>
+          </select>
+          <select class="input-select dist" id="city" name="newexaminee[city]">
+              <option value="">请选择</option>
+          </select>
+          <select class="input-select dist" id="county" name="newexaminee[county]">
+              <option value="">请选择</option>
+          </select>
+          <select class="input-select dist" id="town" name="newexaminee[town]">
+              <option value="">请选择</option>
+          </select>
         </div>
-    	<div class="item-tips error" id="tips_town">请选择所在乡镇</div>
+        <div class="item-tips error" id="tips_province">请选择所在省</div>
     </div>
     <div class="itemRow">
         <div class="item-name">所在单位</div>
@@ -66,45 +59,25 @@
     </form>
 </div>
 <script type="text/javascript">
-var optionhtml = '<option value="">请选择省份</option>';
-$.ajax({
-	url:'/?m=common&c=district&a=fetchdistrict&fid=0',
-	dataType:'json',
-	success: function(json){
-		if(json.errno == 0){
-			for(var k in json.data){
-				var optionitem = json.data[k];
-				optionhtml+= '<option idvalue="'+optionitem.id+'" value="'+
-				optionitem.name+'"'+((optionitem.name == "{$shop[province]}") ? '  selected="selected"' : '')+'>'+optionitem.name+'</option>';
-				
-			}
-			$("#province").html(optionhtml);
-			var province = $("#province").find("option:selected").attr("idvalue");
-			showCity(province);
-		}
-	}
-});
+DSXCMS.showDistrict(0,'#province','$examinee[province]','请选择省份');
 $("#province").change(function(){
-	var province = $(this).find("option:selected").attr("idvalue");
-	showCity(province);
+	var fid = $(this).find("option:selected").attr('idvalue');
+	//if(!fid) return;
+	DSXCMS.showDistrict(fid,'#city','$examinee[city]','请选择城市');
 });
-function showCity(province){
-	if(!province) return;
-	var Options = '<option value="">请选择城市</option>';
-	$.ajax({
-		url:'/?m=common&c=district&a=fetchdistrict&fid='+province,
-		dataType:'json',
-		success: function(json){
-			for(var k in json.data){
-				var optionitem = json.data[k];
-				Options+= '<option idvalue="'+optionitem.id+'" value="'+
-				optionitem.name+'"'+((optionitem.name == "$shop[city]") ? '  selected="selected"' : '')+'>'+optionitem.name+'</option>';
-				
-			}
-			$("#city").html(Options);
-		}
-	});
-}
+
+$("#city").change(function(){
+	var fid = $(this).find("option:selected").attr('idvalue');
+	//if(!fid) return;
+	DSXCMS.showDistrict(fid,'#county','$examinee[county]','请选择区县州');
+});
+
+$("#county").change(function(){
+	var fid = $(this).find("option:selected").attr('idvalue');
+	//if(!fid) return;
+	DSXCMS.showDistrict(fid,'#town','$examinee[town]','请选择乡镇');
+});
+
 $("#examineeForm").submit(function(){
 	if(!isUsername($("#username").val())){
 		$("#tips_name").show();

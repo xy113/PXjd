@@ -6,7 +6,7 @@
            <th width="40"><center>成绩</center></th>
         </tr>
         <?php if(is_array($recordlist)) { foreach($recordlist as $list) { ?>        <?php $examtime=@date('y/m/d',$list['starttime']); ?>        <tr>
-        	<th><a href="/?m=weixin&c=exampaper&a=viewpaper&recordid=<?php echo $list['recordid'];?>"><?php echo $questionlist[$list['questionid']]['name'];?></a></th>
+        	<th><a href="/?m=weixin&c=exampaper&a=viewpaper&recordid=<?php echo $list['recordid'];?>"><?php echo $paperlist[$list['paperid']]['name'];?></a></th>
            <td><?php echo $examtime;?></td>
            <td><center><?php echo $list['score'];?></center></td>
         </tr>

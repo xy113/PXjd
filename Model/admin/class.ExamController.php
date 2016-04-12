@@ -1,6 +1,5 @@
 <?php
 namespace Admin;
-use Core\phpExcel;
 class ExamController extends BaseController{
 	public function index(){}
 	
@@ -258,6 +257,7 @@ class ExamController extends BaseController{
 			if ($delete && is_array($delete)){
 				$deleteids = implode(',', $delete);
 				$this->t('exam_examinee')->where("uid IN($deleteids)")->delete();
+				$this->t('exam_record')->where("uid IN($deleteids)")->delete();
 				$this->showSuccess('delete_succeed');
 			}else {
 				$this->showError('no_select');
@@ -301,38 +301,34 @@ class ExamController extends BaseController{
 			global $G,$lang;
 			$pagesize   = 50;
 			$paperid = intval($_GET['paperid']);
-			$where = $paperid ? "paperid='$paperid'" : '';
-			$totalnum  = $this->t('exam_record')->where($where)->count();
+			if ($paperid){
+				$where = "paperid='$paperid'";
+			}else {
+				$this->notFound();
+			}
+			
+			$kw = trim($_GET['kw']);
+			$field = trim($_GET['field']);
+			if ($kw && $field){
+				if ($field == 'uid'){
+					$where.= " AND r.uid='$kw'";
+				}elseif ($field == 'username'){
+					$where.= " AND r.username='$kw'";
+				}elseif ($field == 'idnumber'){
+					$where.= " AND e.idnumber='$kw'";
+				}
+			}
+			
+			$totalnum  = $this->t(array('exam_record'=>'r'))->join(array('exam_examinee'=>'e'), 'LEFT', 'e.uid=r.uid')->where($where)->count();
 			$pagecount = $totalnum < $pagesize ? 1 : ceil($totalnum/$pagesize);
 			$orderby = isset($_GET['orderby']) ? $_GET['orderby'] : '';
 			$orderby = in_array($orderby, array('spenttime','score')) ? $orderby : 'recordid';
 			$asc = (isset($_GET['asc']) && strtoupper($_GET['asc']) == 'DESC')  ? 'DESC' : 'ASC';
-			$recordlist = $this->t('exam_record')->field('*,(submittime-starttime) as spenttime')->where($where)
-			->order($orderby,$asc)->page($G['page'],$pagesize)->select();
-			$examineelist = array();
-			if ($recordlist){
-				$uids = $comma = '';
-				foreach ($recordlist as $list){
-					$uids.= $comma.$list['uid'];
-					$comma = ',';
-				}
-				if ($uids){
-					$examineelist = $this->t('exam_examinee')->where("uid IN($uids)")->select();
-					if ($examineelist){
-						$newlist = array();
-						foreach ($examineelist as $list){
-							$newlist[$list['uid']] = $list;
-						}
-						$examineelist = $newlist;
-						unset($newlist);
-					}else {
-						$examineelist = array();
-					}
-				}
-				unset($uids,$comma);
-			}
-			$pages = $this->showPages($G['page'], $pagecount, $totalnum, "paperid=$paperid&orderby=$orderby&asc=$asc");
-			$paperlist = cache('exam_paper');
+			
+			$recordlist = $this->t(array('exam_record'=>'r'))->field('r.*,(r.submittime-r.starttime) as spenttime,e.idnumber,e.town,e.company')
+			->join(array('exam_examinee'=>'e'), 'LEFT', 'e.uid=r.uid')->where($where)->order($orderby,$asc)->page($G['page'],$pagesize)->select();
+			$pages = $this->showPages($G['page'], $pagecount, $totalnum, "paperid=$paperid&orderby=$orderby&asc=$asc&field=$field&kw=$kw");
+			
 			include template('exam_record');
 		}
 	}
@@ -341,80 +337,127 @@ class ExamController extends BaseController{
 	 * 导出成绩
 	 */
 	public function exportresult(){
-		global $G;
+		global $G,$lang;
 		$paperid = intval($_GET['paperid']);
-		$where['paperid'] = $paperid;
-		if ($G['page'] == 1){
-			$data[0] = array(
-					'名次',
-					'姓名',
-					'身份证号',
-					'所在乡镇',
-					'所在单位',
-					'考试时间',
-					'正常交卷',
-					'答题用时',
-					'答题成绩'
-			);
-		}
 		
-		$recordlist = $this->t('exam_record')->field('*,(submittime-starttime) as spenttime')
-		->where($where)->page($G['page'],100)->order('score','DESC')->select();
-		if ($recordlist){
-			$ordernum = ($G['page'] - 1)*100;
-			echo '<h3><center>正在导出数据...,请不要刷新或关闭页面</center></h3>';
-			echo '<h3><center>已完成:'.$ordernum.'</center></h3>';
+		if (isset($_GET['formsubmit'])){ 			
+			$titles = array(
+					array(
+						'名次',
+						'姓名',
+						'身份证号',
+						'所在乡镇',
+						'所在单位',
+						'考试时间',
+						'正常交卷',
+						'答题用时',
+						'答题成绩'
+					)
+			);
 			
-			$uids = $comma = '';
-			foreach ($recordlist as $list){
-				$uids.= $comma.$list['uid'];
-				$comma = ',';
-			}
-			if ($uids){
-				$examineelist = $this->t('exam_examinee')->where("uid IN($uids)")->select();
-				if ($examineelist){
-					$newlist = array();
-					foreach ($examineelist as $list){
-						$newlist[$list['uid']] = $list;
-					}
-					$examineelist = $newlist;
-					unset($newlist);
-				}else {
-					$examineelist = array();
-				}
-			}
-				
-			foreach ($recordlist as $list){
-				$ordernum++;
-				$data[] = array(
-						$ordernum,
-						$examineelist[$list['uid']]['username'],
-						$examineelist[$list['uid']]['idnumber'],
-						$examineelist[$list['uid']]['town'],
-						$examineelist[$list['uid']]['company'],
-						@date('Y-m-d H:i',$list['starttime']),
-						($list['submited'] ? '是' : '否'),
-						$this->_formatTime($list['spenttime']),
-						$list['score']
-				);
-			}
-			$results = cache('exam_export');
-			if ($results){
-				$results = array_merge($results,$data);
+			$excel = new \Core\phpExcel();
+			if ($G['page'] == 1){
+				@file_put_contents(CACHE_PATH.'paper-'.$paperid.'.xls', '');
+				$rows = $excel->getHeader();
 			}else {
-				$results = $data;
+				$rows = '';
 			}
-			cache('exam_export', $results);
-			$url = '/?m='.$G['m'].'&c='.$G['c'].'&a='.$G['a'].'&paperid='.$paperid.'&page='.($G['page']+1);
-			echo '<script>setTimeout(function(){window.location.href="'.$url.'"},2000);</script>';
-			exit();
+
+			$where = "r.paperid='$paperid'";
+			
+			$company  = isset($_GET['company']) ? $_GET['company'] : '';
+			$province = isset($_GET['province']) ? $_GET['province'] : '';
+			$city     = isset($_GET['city']) ? $_GET['city'] : '';
+			$county   = isset($_GET['county']) ? $_GET['county'] : '';
+			$town     = isset($_GET['town']) ? $_GET['town'] : '';
+			$spenttime1 = isset($_GET['spenttime1']) ? intval($_GET['spenttime1']) : 0;
+			$spenttime2 = isset($_GET['spenttime2']) ? intval($_GET['spenttime2']) : 0;
+			$score1  = isset($_GET['score1']) ? $_GET['score1'] : '';
+			$score2  = isset($_GET['score2']) ? $_GET['score2'] : '';
+			$orderby = isset($_GET['orderby']) ? $_GET['orderby'] : 'score';
+			$asc = isset($_GET['asc']) ? strtoupper($_GET['asc']) : 'ASC';
+			
+			$where.= $company ? " AND e.company='$company'" : '';
+			$where.= $province ? " AND e.province='$province'" : '';
+			$where.= $city ? " AND e.city='$city'" : '';
+			$where.= $county ? " AND e.county='$county'" : '';
+			$where.= $town ? " AND e.town='$town'" : '';
+			$where.= $spenttime1 && $spenttime2 ? " AND (spenttime BETWEEN ".($spenttime1*60)." AND ".($spenttime2*60).")" : '';
+			$where.= $score1 && $score2 ? " AND (r.score BETWEEN $score1 AND $score2)" : '';
+			
+			$recordlist = $this->t(array('exam_record'=>'r'))->field('r.*,(r.submittime-r.starttime) as spenttime,e.idnumber,e.town,e.company')
+			->join(array('exam_examinee'=>'e'), 'LEFT', 'e.uid=r.uid')->where($where)->page($G['page'],100)->order($orderby,$asc)->select();
+			if ($recordlist){
+				$ordernum = ($G['page'] - 1)*100;
+				echo '<h3><center>正在导出数据...,请不要刷新或关闭页面</center></h3>';
+				echo '<h3><center>已完成:'.$ordernum.'</center></h3>';
+				
+				
+				foreach ($recordlist as $list){
+					$ordernum++;
+					$data = array(
+							$ordernum,
+							$list['username'],
+							$list['idnumber'],
+							$list['town'],
+							$list['company'],
+							@date('Y-m-d H:i',$list['starttime']),
+							($list['submited'] ? '是' : '否'),
+							$this->_formatTime($list['spenttime']),
+							$list['score']
+					);
+					$rows.= $excel->getRow($data);
+				}
+				
+				@file_put_contents(CACHE_PATH.'paper-'.$paperid.'.xls', $rows, FILE_APPEND);
+				
+				$url = '/?m='.$G['m'].'&c='.$G['c'].'&a='.$G['a'].'&paperid='.$paperid.'&page='.($G['page']+1).'&formsubmit=yes';
+				$url.= "&company=$company&province=$province&city=$city&county=$county&town=$town&spenttime1=$spenttime1&spenttime2=$spenttime2";
+				$url.= "&score1=$score1&score2=$score2&orderby=$orderby&asc=$asc&totalnum=".$ordernum;
+				echo '<script>setTimeout(function(){window.location.href="'.$url.'"},2000);</script>';
+				exit();
+			}else {
+				@file_put_contents(CACHE_PATH.'paper-'.$paperid.'.xls',$excel->getFooter(), FILE_APPEND);
+				L('exprt_complete', '导出完成,总计:'.$_GET['totalnum'].'条,请点击下载表格');
+				L('down_excel', '下载表格');
+				$this->showSuccess('exprt_complete','',array(
+						array('text'=>'go_back','url'=>'/?m=admin&c=exam&a='.$G['a'].'&paperid='.$paperid),
+						array('text'=>'down_excel','url'=>'/?m=admin&c=exam&a=getxml&paperid='.$paperid, 'target'=>'_blank')
+				));
+			}
 		}else {
-			echo '<h3><center>导出完成，总计:'.count($results).'条数据。</center></h3>';
-			$results = cache('exam_export');
-			$excel = new phpExcel();
-			$excel->addArray($results);
-			$excel->generateXML($paperid);
+			if (is_file(CACHE_PATH.'paper-'.$paperid.'.xls')){
+				$lastexport = date('Y-m-d H:i:s',filemtime(CACHE_PATH.'paper-'.$paperid.'.xls'));
+			}
+			include template('exam_export');
 		}
+	}
+	
+	public function getxml(){
+		$paperid = intval($_GET['paperid']);
+		$filename = 'paper-'.$paperid.'.xls';
+		$filepath = CACHE_PATH.$filename;
+		$filesize = filesize($filepath);
+		
+		$fp = fopen($filepath,"r");
+		//下载文件需要用到的头
+		header("Content-type: application/octet-stream");
+		header("Accept-Ranges: bytes");
+		header("Accept-Length:".$filesize);
+		header("Content-Disposition: attachment; filename=".$filename);
+		@readfile($filepath);
+		/*
+		$buffer=1024;
+		$file_count=0;
+		//向浏览器返回数据
+		while(!feof($fp) && $file_count<$file_size){
+			$file_con=fread($fp,$buffer);
+			$file_count+=$buffer;
+			echo $file_con;
+		}
+		*/
+		fclose($fp);
+		exit();
 	}
 	
 	private function _formatTime($time){
@@ -504,6 +547,22 @@ class ExamController extends BaseController{
 			cache('exam_paper',$newlist);
 		}else {
 			cache('exam_paper',array());
+		}
+	}
+	
+	function updateexaminee(){
+		global $G;
+		$datalist = $this->t('exam_examinee')->order('uid ASC')->page($G['page'],200)->select();
+		if ($datalist){
+			foreach ($datalist as $list){
+				$this->t('exam_record')->where(array('uid'=>$list['uid']))->update(array('username'=>$list['username']));
+				
+			}
+			$url = '/?m='.$G['m'].'&c='.$G['c'].'&a='.$G['a'].'&page='.($G['page']+1);
+			echo '<script>setTimeout(function(){window.location.href="'.$url.'"},2000);</script>';
+			exit();
+		}else {
+			echo 'complete!';
 		}
 	}
 }
